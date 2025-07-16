@@ -1,10 +1,10 @@
+import os
+import requests
+import base64
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-
 from langchain_community.llms import Ollama
 from langchain_community.vectorstores import Chroma
-
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -48,13 +48,11 @@ load_dotenv()
 #         return JsonResponse({"error": str(e)}, status=500)
 
 
-import requests
-
-
 @api_view(["POST"])
 def generate_image(request):
     try:
         prompt = request.data.get("prompt", "")
+        instructions = "You are a prompt refiner for image generation. Rewrite this as a prompt for Stable Diffusion. Use comma-separated style, add visual details, lighting, and style descriptors. Return ONLY the improved visual prompt in 1 sentence. No commentary, examples, or explanations."
 
         # OpenRouter API call (correct format)
         headers = {
@@ -68,7 +66,7 @@ def generate_image(request):
             "messages": [
                 {
                     "role": "system",  # Add a system message to set behavior
-                    "content": "You are a prompt refiner for image generation. Rewrite this as a prompt for Stable Diffusion. Use comma-separated style, add visual details, lighting, and style descriptors. No commentary, examples, or explanations. ",
+                    "content": f"{instructions}",
                 },
                 {
                     "role": "user",
@@ -83,8 +81,27 @@ def generate_image(request):
         response.raise_for_status()  # Raise error if call fails
 
         refined_prompt = response.json()["choices"][0]["message"]["content"]
+        # return JsonResponse({"status": "success", "refined_prompt": refined_prompt})
 
-        return JsonResponse({"status": "success", "refined_prompt": refined_prompt})
+        # Now that an LLM has improved the prompt, send the refined_prompt to a model to GENERATE AN IMAGE
+        hf_headers = {
+            "Authorization": f"Bearer {os.getenv('HF_TOKEN')}",  # Hugging Face token
+            "Content-Type": "application/json",
+        }
+        hf_response = requests.post(
+            "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev",
+            headers=hf_headers,
+            json={"inputs": refined_prompt},  # Use refined prompt here
+        )
+        hf_response.raise_for_status()
+
+        return JsonResponse(
+            {
+                "status": "success",
+                "refined_prompt": refined_prompt,
+                "image_base64": base64.b64encode(hf_response.content).decode("utf-8"),
+            }
+        )
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
