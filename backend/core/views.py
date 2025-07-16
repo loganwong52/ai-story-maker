@@ -95,11 +95,14 @@ def generate_image(request):
         )
         hf_response.raise_for_status()
 
+        # Get the image & turn it into text format
+        encoded_image = base64.b64encode(hf_response.content).decode("utf-8")
+
         return JsonResponse(
             {
                 "status": "success",
                 "refined_prompt": refined_prompt,
-                "image_base64": base64.b64encode(hf_response.content).decode("utf-8"),
+                "image_base64": encoded_image,  # encoded image data
             }
         )
 
