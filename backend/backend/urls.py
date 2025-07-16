@@ -14,9 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
+from core.views import generate_image  # Import the view
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    # This maps the URL http://localhost:8000/api/generate-image/ to your generate_image view.
+    path("api/generate-image/", generate_image),  # added this myself
 ]
