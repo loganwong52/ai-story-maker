@@ -12,48 +12,14 @@ load_dotenv()
 
 # # Sets up a DRF (Django REST Framework) view that accepts POST requests.
 # # Returns a mock response (Ollama/ChromaDB logic will be here)
-# @api_view(["POST"])  # this endpoint only accepts POST requests
-# def generate_image(request):
-#     try:
-#         # 1. Get user prompt
-#         prompt = request.data.get("prompt", "")
-
-#         # 2. Initialize AI components
-#         llm = Ollama(
-#             base_url="https://openrouter.ai/api/v1",  # Remote endpoint
-#             model="meta-llama/llama-3-8b-instruct",
-#             headers={
-#                 # "HTTP-Referer": "YOUR_SITE_URL",
-#                 "HTTP-Referer": "http://localhost:8000",  # Your Django dev server
-#                 # "HTTP-Referer": "https://yourdomain.com",  # e.g., https://ai-story-generator.porkbun.app
-#                 "Authorization": f"Bearer {os.getenv('OPENROUTER_KEY')}",
-#             },
-#         )
-
-#         # vector_db = Chroma(persist_directory="./chroma_data")  # Local vector store
-
-#         # 3. (Next we'll add RAG and image generation)
-
-#         refined_prompt = llm(f"Improve this image prompt: {prompt}")
-
-#         return JsonResponse(
-#             {
-#                 "status": "success",
-#                 "refined_prompt": refined_prompt,
-#                 "model": "llama3-8b (via OpenRouter)",
-#             }
-#         )
-
-#     except Exception as e:
-#         return JsonResponse({"error": str(e)}, status=500)
-
-
-@api_view(["POST"])
+@api_view(["POST"])  # this endpoint only accepts POST requests
 def generate_image(request):
     try:
+        # 1. Get user prompt
         prompt = request.data.get("prompt", "")
         instructions = "You are a prompt refiner for image generation. Rewrite this as a prompt for Stable Diffusion. Use comma-separated style, add visual details, lighting, and style descriptors. Return ONLY the improved visual prompt in 1 sentence. No commentary, examples, or explanations."
 
+        # 2. Send prompt to LLM for Refinement
         # OpenRouter API call (correct format)
         headers = {
             "Authorization": f"Bearer {os.getenv('OPENROUTER_KEY')}",
@@ -83,17 +49,33 @@ def generate_image(request):
         refined_prompt = response.json()["choices"][0]["message"]["content"]
         # return JsonResponse({"status": "success", "refined_prompt": refined_prompt})
 
-        # Now that an LLM has improved the prompt, send the refined_prompt to a model to GENERATE AN IMAGE
+        # 3. (Next we'll add RAG and image generation)
+        # vector_db = Chroma(persist_directory="./chroma_data")  # Local vector store
+
+        ############################################################################
+
+        # 4. Send the refined prompt to a model to GENERATE AN IMAGE
         hf_headers = {
             "Authorization": f"Bearer {os.getenv('HF_TOKEN')}",  # Hugging Face token
             "Content-Type": "application/json",
         }
+
+        # model_name = "black-forest-labs/FLUX.1-dev"
+        model_name = "stabilityai/stable-diffusion-3.5-large"
+        link = f"https://api-inference.huggingface.co/models/{model_name}"
+
         hf_response = requests.post(
-            "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev",
+            link,
             headers=hf_headers,
-            json={"inputs": refined_prompt},  # Use refined prompt here
+            json={"prompt": refined_prompt, "output_format": "png"},
         )
         hf_response.raise_for_status()
+
+        #  Handle API errors (SD3.5 returns JSON errors)
+        if hf_response.headers["Content-Type"] == "application/json":
+            error_data = hf_response.json()
+            if "error" in error_data:
+                return JsonResponse({"error": error_data["error"]}, status=400)
 
         # Get the image & turn it into text format
         encoded_image = base64.b64encode(hf_response.content).decode("utf-8")
