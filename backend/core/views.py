@@ -55,30 +55,22 @@ def generate_image(request):
         ############################################################################
 
         # 4. Send the refined prompt to a model to GENERATE AN IMAGE
-        hf_headers = {
-            "Authorization": f"Bearer {os.getenv('HF_TOKEN')}",  # Hugging Face token
-            "Content-Type": "application/json",
-        }
-
-        # model_name = "black-forest-labs/FLUX.1-dev"
-        model_name = "stabilityai/stable-diffusion-3.5-large"
-        link = f"https://api-inference.huggingface.co/models/{model_name}"
-
-        hf_response = requests.post(
-            link,
-            headers=hf_headers,
-            json={"prompt": refined_prompt, "output_format": "png"},
+        # link = "https://api.deepai.org/api/text2img"
+        response = requests.post(
+            "https://api.deepai.org/api/text2img",
+            data={"text": refined_prompt},
+            headers={"api-key": f"{os.getenv('DEEPAI_KEY')}"},
         )
-        hf_response.raise_for_status()
+        response.raise_for_status()
 
-        #  Handle API errors (SD3.5 returns JSON errors)
-        if hf_response.headers["Content-Type"] == "application/json":
-            error_data = hf_response.json()
-            if "error" in error_data:
-                return JsonResponse({"error": error_data["error"]}, status=400)
+        # Get the image URL
+        image_url = response.json()["output_url"]
+
+        image_response = requests.get(image_url)
+        image_response.raise_for_status()
 
         # Get the image & turn it into text format
-        encoded_image = base64.b64encode(hf_response.content).decode("utf-8")
+        encoded_image = base64.b64encode(image_response.content).decode("utf-8")
 
         return JsonResponse(
             {

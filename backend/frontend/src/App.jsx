@@ -36,19 +36,19 @@ function App() {
 
   }
 
-  // Add keypress handler
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !isLoading && prompt.trim()) {
-      generateImage();
-    }
-  };
+  // // Add keypress handler
+  // const handleKeyPress = (e) => {
+  //   if (e.key === 'Enter' && !isLoading && prompt.trim()) {
+  //     generateImage();
+  //   }
+  // };
 
-  // Set up event listener
-  useEffect(() => {
-    const input = document.getElementById('prompt-input');
-    input.addEventListener('keypress', handleKeyPress);
-    return () => input.removeEventListener('keypress', handleKeyPress);
-  }, [prompt, isLoading]);  // Re-run when these change
+  // // Set up event listener
+  // useEffect(() => {
+  //   const input = document.getElementById('prompt-input');
+  //   input.addEventListener('keypress', handleKeyPress);
+  //   return () => input.removeEventListener('keypress', handleKeyPress);
+  // }, [prompt, isLoading]);  // Re-run when these change
 
 
   return (
@@ -66,7 +66,7 @@ function App() {
       </button>
 
       {refinedPrompt && <p>Refined Prompt: {refinedPrompt}</p>}
-      {image && <img src={image} alt="AI Generated" width={512} />}
+      {image && <img src={image} alt="AI Generated Image" width={512} />}
     </div>
   )
 }
