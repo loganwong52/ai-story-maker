@@ -1,34 +1,34 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [prompt, setPrompt] = useState('')
+  const [image, setImage] = useState('')
+  const [refinedPrompt, setRefinedPrompt] = useState('')
+
+  const generateImage = async () => {
+    const response = await fetch('/api/generate-image/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    })
+    const data = await response.json()
+    setRefinedPrompt(data.refined_prompt)
+    setImage(`data:image/jpeg;base64,${data.image_base64}`)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <input
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        placeholder="User prompt goes here"
+      />
+      <button onClick={generateImage}>Generate</button>
+
+      {refinedPrompt && <p>Refined: {refinedPrompt}</p>}
+      {image && <img src={image} alt="AI Generated" width={512} />}
+    </div>
   )
 }
 

@@ -4,3 +4,8 @@ __pycache__/
 backend/db.sqlite3
 test_image.jpg
 response.json
+*/package-lock.json
+*/package.json
+node_modules/
+package-lock.json
+package.json
