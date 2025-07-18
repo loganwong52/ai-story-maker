@@ -13,7 +13,7 @@ load_dotenv()
 # # Sets up a DRF (Django REST Framework) view that accepts POST requests.
 # # Returns a mock response (Ollama/ChromaDB logic will be here)
 @api_view(["POST"])  # this endpoint only accepts POST requests
-def generate_image(request):
+def refine_prompt(request):
     try:
         # 1. Get user prompt
         prompt = request.data.get("prompt", "")
@@ -32,7 +32,7 @@ def generate_image(request):
             "messages": [
                 {
                     "role": "system",  # Add a system message to set behavior
-                    "content": f"{instructions}",
+                    "content": instructions,
                 },
                 {
                     "role": "user",
@@ -47,17 +47,24 @@ def generate_image(request):
         response.raise_for_status()  # Raise error if call fails
 
         refined_prompt = response.json()["choices"][0]["message"]["content"]
-        # return JsonResponse({"status": "success", "refined_prompt": refined_prompt})
+        return JsonResponse({"status": "success", "refined_prompt": refined_prompt})
 
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@api_view(["POST"])  # this endpoint only accepts POST requests
+def generate_image(request):
+    try:
         # 3. (Next we'll add RAG and image generation)
         # vector_db = Chroma(persist_directory="./chroma_data")  # Local vector store
 
-        ############################################################################
-
         # 4. Send the refined prompt to a model to GENERATE AN IMAGE
-        # link = "https://api.deepai.org/api/text2img"
+        refined_prompt = request.data.get("prompt", "")
+
+        link = "https://api.deepai.org/api/text2img"
         response = requests.post(
-            "https://api.deepai.org/api/text2img",
+            link,
             data={"text": refined_prompt},
             headers={"api-key": f"{os.getenv('DEEPAI_KEY')}"},
         )
@@ -65,7 +72,6 @@ def generate_image(request):
 
         # Get the image URL
         image_url = response.json()["output_url"]
-
         image_response = requests.get(image_url)
         image_response.raise_for_status()
 
