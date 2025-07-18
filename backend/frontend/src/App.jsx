@@ -34,6 +34,7 @@ function App() {
 
 
   const generateImage = async () => {
+    // Check if refined prompt is empty
     if (!refinedPrompt.trim()) return;
 
     setIsGenerating(true);
@@ -52,36 +53,25 @@ function App() {
     }
   };
 
-  // // Add keypress handler
-  // const handleKeyPress = (e) => {
-  //   if (e.key === 'Enter' && !isLoading && prompt.trim()) {
-  //     generateImage();
-  //   }
-  // };
-
-  // // Set up event listener
-  // useEffect(() => {
-  //   const input = document.getElementById('prompt-input');
-  //   input.addEventListener('keypress', handleKeyPress);
-  //   return () => input.removeEventListener('keypress', handleKeyPress);
-  // }, [prompt, isLoading]);  // Re-run when these change
-
 
   return (
     <div className="app-container">
       <div className="input-section">
-        <h2>Original Prompt</h2>
-        <input
+        <h2>Enter you prompt below</h2>
+        <textarea
           value={originalPrompt}
           onChange={(e) => setOriginalPrompt(e.target.value)}
-          placeholder="Enter your initial prompt here"
+          rows={4}
+          cols={40}
         />
-        <button
-          onClick={refinePrompt}
-          disabled={isRefining || !originalPrompt.trim()}
-        >
-          {isRefining ? 'Refining...' : 'Refine Prompt'}
-        </button>
+        <div>
+          <button
+            onClick={refinePrompt}
+            disabled={isRefining || !originalPrompt.trim()}
+          >
+            {isRefining ? 'Refining...' : 'Refine Prompt'}
+          </button>
+        </div>
       </div>
 
       {refinedPrompt && (
@@ -91,14 +81,17 @@ function App() {
             value={refinedPrompt}
             onChange={(e) => setRefinedPrompt(e.target.value)}
             placeholder="Refined prompt will appear here"
-            rows={4}
+            rows={12}
+            cols={80}
           />
-          <button
-            onClick={generateImage}
-            disabled={isGenerating || !refinedPrompt.trim()}
-          >
-            {isGenerating ? 'Generating...' : 'Generate Image'}
-          </button>
+          <div>
+            <button
+              onClick={generateImage}
+              disabled={isGenerating || !refinedPrompt.trim()}
+            >
+              {isGenerating ? 'Generating...' : 'Generate Image'}
+            </button>
+          </div>
         </div>
       )}
 
