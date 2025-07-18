@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,4 +42,76 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Below is new CSS I added myself */
+
+/* A flexbox layout with 2 columns */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* left */
+.input-section {
+  flex: 1;
+  padding: 20px;
+}
+
+/* right */
+.result-section {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* vertical divider line between the sections */
+.input-section {
+  position: relative;
+}
+
+.input-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -10px;
+  height: 100%;
+  width: 1px;
+  background-color: #ccc;
+}
+
+
+/* white rectangle container */
+.image-bleed {
+  width: 6.875in;
+  height: 10.4375in;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+
+/* the safe area inside the white rectangle */
+.safe-area {
+  width: 6.125in;
+  height: 9.6875in;
+  border: 1px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.safe-area img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
