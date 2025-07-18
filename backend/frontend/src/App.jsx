@@ -90,7 +90,7 @@ function App() {
       {/* Left section w/ User Prompts */}
       <div className="left-column">
         <div className="input-section">
-          <h2>Enter your prompt below</h2>
+          <h2>Original prompt</h2>
           <textarea
             value={originalPrompt}
             onChange={(e) => setOriginalPrompt(e.target.value)}
@@ -137,16 +137,22 @@ function App() {
 
 
       {/* Right White Section */}
-      {image && (
-        <div className="result-section">
-          <h2>Generated Image</h2>
-          <div className="image-bleed">
-            <div className="safe-area">
-              <img src={image} alt="AI Generated" />
-            </div>
+      <div className="result-section">
+        <h2>Generated Image</h2>
+
+        <div className="image-bleed">
+          <div className="trim-line"></div>
+          <div className="safe-area">
+
+            {/* Where the image actually appears */}
+            {image && (
+              <img src={image} alt={`AI Generated Image;
+                ${originalPrompt}`} />
+            )}
           </div>
         </div>
-      )}
+
+      </div>
 
       {/* The end div of app-container */}
     </div>

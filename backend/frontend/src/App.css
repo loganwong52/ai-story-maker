@@ -45,12 +45,19 @@
 }
 
 /* Below is new CSS I added myself */
+img {
+  white-space: pre
+}
 
 /* A flexbox layout with 2 columns */
 .app-container {
   display: flex;
-  height: 100vh;
   width: 100%;
+  max-width: 100vw;
+  /* Ensure it doesn't overflow horizontally */
+  padding: 20px;
+  box-sizing: border-box;
+
 }
 
 /* left */
@@ -88,6 +95,7 @@
 
 /* white rectangle container */
 .image-bleed {
+  position: relative;
   width: 6.875in;
   height: 10.4375in;
   background-color: white;
@@ -95,9 +103,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  margin: 0 auto;
+
 }
 
+/* trim line */
+.trim-line {
+  position: absolute;
+  width: 6.625in;
+  height: 10.1875in;
+  border: 1px solid cornflowerblue;
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* the safe area inside the white rectangle */
 .safe-area {
@@ -114,7 +132,7 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  /*so alt text is black */
   color: black;
-  /* This makes the alt text black */
   text-align: center;
 }
