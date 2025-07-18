@@ -11,6 +11,34 @@ function App() {
   const [isRefining, setIsRefining] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
+
+  const handleFileUpload = async (e) => {
+    // Get file if it exists
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Append file to FormData
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      // Send file to Django
+      const response = await fetch('/api/extract-text/', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      // Update textarea with extracted text
+      setOriginalPrompt(data.text);
+
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+    }
+  };
+
   const refinePrompt = async () => {
     // check if user input is empty
     if (!originalPrompt.trim()) return;
@@ -54,16 +82,26 @@ function App() {
   };
 
 
+
+
   return (
     <div className="app-container">
       <div className="input-section">
         <h2>Enter you prompt below</h2>
+        {/* Users type into the text box */}
         <textarea
           value={originalPrompt}
           onChange={(e) => setOriginalPrompt(e.target.value)}
           rows={4}
           cols={40}
         />
+
+        {/* Also let Users upload text files */}
+        <div>
+          <input type="file" accept=".txt,.pdf,.doc,.docx" onChange={handleFileUpload} />
+        </div>
+
+        {/* Users click this button to Refine their initial prompt */}
         <div>
           <button
             onClick={refinePrompt}
@@ -74,6 +112,7 @@ function App() {
         </div>
       </div>
 
+      {/* This ONLY APPEARS once refine prompt is clicked */}
       {refinedPrompt && (
         <div className="input-section">
           <h2>Refined Prompt</h2>
@@ -84,6 +123,8 @@ function App() {
             rows={12}
             cols={80}
           />
+
+          {/* Users click this button to generate 1 image */}
           <div>
             <button
               onClick={generateImage}
@@ -95,6 +136,7 @@ function App() {
         </div>
       )}
 
+      {/* This is where the AI Generated Image appears */}
       {image && (
         <div className="result-section">
           <h2>Generated Image</h2>

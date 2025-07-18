@@ -5,6 +5,12 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from langchain_community.llms import Ollama
 from langchain_community.vectorstores import Chroma
+
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from PyPDF2 import PdfReader
+from docx import Document
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -88,3 +94,33 @@ def generate_image(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+
+@csrf_exempt
+def extract_text(request):
+    if request.method == "POST" and request.FILES.get("file"):
+        uploaded_file = request.FILES["file"]
+        filename = default_storage.save(uploaded_file.name, uploaded_file)
+        file_path = default_storage.path(filename)
+
+        try:
+            ext = os.path.splitext(filename)[1].lower()
+            text = ""
+
+            if ext == ".txt":
+                with open(file_path, "r", encoding="utf-8") as f:
+                    text = f.read()
+            elif ext == ".pdf":
+                reader = PdfReader(file_path)
+                text = "\n".join([page.extract_text() or "" for page in reader.pages])
+            elif ext in [".doc", ".docx"]:
+                doc = Document(file_path)
+                text = "\n".join([p.text for p in doc.paragraphs])
+            else:
+                return JsonResponse({"error": "Unsupported file type"}, status=400)
+
+            return JsonResponse({"text": text})
+        finally:
+            default_storage.delete(filename)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
