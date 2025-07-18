@@ -86,63 +86,69 @@ function App() {
 
   return (
     <div className="app-container">
-      <div className="input-section">
-        <h2>Enter you prompt below</h2>
-        {/* Users type into the text box */}
-        <textarea
-          value={originalPrompt}
-          onChange={(e) => setOriginalPrompt(e.target.value)}
-          rows={4}
-          cols={40}
-        />
 
-        {/* Also let Users upload text files */}
-        <div>
-          <input type="file" accept=".txt,.pdf,.doc,.docx" onChange={handleFileUpload} />
-        </div>
-
-        {/* Users click this button to Refine their initial prompt */}
-        <div>
-          <button
-            onClick={refinePrompt}
-            disabled={isRefining || !originalPrompt.trim()}
-          >
-            {isRefining ? 'Refining...' : 'Refine Prompt'}
-          </button>
-        </div>
-      </div>
-
-      {/* This ONLY APPEARS once refine prompt is clicked */}
-      {refinedPrompt && (
+      {/* Left section w/ User Prompts */}
+      <div className="left-column">
         <div className="input-section">
-          <h2>Refined Prompt</h2>
+          <h2>Enter your prompt below</h2>
           <textarea
-            value={refinedPrompt}
-            onChange={(e) => setRefinedPrompt(e.target.value)}
-            placeholder="Refined prompt will appear here"
-            rows={12}
-            cols={80}
+            value={originalPrompt}
+            onChange={(e) => setOriginalPrompt(e.target.value)}
+            rows={4}
+            cols={40}
           />
 
-          {/* Users click this button to generate 1 image */}
+          <div>
+            <input type="file" accept=".txt,.pdf,.doc,.docx" onChange={handleFileUpload} />
+          </div>
+
           <div>
             <button
-              onClick={generateImage}
-              disabled={isGenerating || !refinedPrompt.trim()}
+              onClick={refinePrompt}
+              disabled={isRefining || !originalPrompt.trim()}
             >
-              {isGenerating ? 'Generating...' : 'Generate Image'}
+              {isRefining ? 'Refining...' : 'Refine Prompt'}
             </button>
+          </div>
+        </div>
+
+        {refinedPrompt && (
+          <div className="input-section refined-section">
+            <h2>Refined Prompt</h2>
+            <textarea
+              value={refinedPrompt}
+              onChange={(e) => setRefinedPrompt(e.target.value)}
+              placeholder="Refined prompt will appear here"
+              rows={12}
+              cols={80}
+            />
+
+            <div>
+              <button
+                onClick={generateImage}
+                disabled={isGenerating || !refinedPrompt.trim()}
+              >
+                {isGenerating ? 'Generating...' : 'Generate Image'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+
+      {/* Right White Section */}
+      {image && (
+        <div className="result-section">
+          <h2>Generated Image</h2>
+          <div className="image-bleed">
+            <div className="safe-area">
+              <img src={image} alt="AI Generated" />
+            </div>
           </div>
         </div>
       )}
 
-      {/* This is where the AI Generated Image appears */}
-      {image && (
-        <div className="result-section">
-          <h2>Generated Image</h2>
-          <img src={image} alt="AI Generated" width={512} />
-        </div>
-      )}
+      {/* The end div of app-container */}
     </div>
   );
 }
