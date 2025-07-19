@@ -94,15 +94,16 @@ function App() {
           <textarea
             value={originalPrompt}
             onChange={(e) => setOriginalPrompt(e.target.value)}
+            placeholder="Enter your prompt here"
             rows={4}
             cols={40}
           />
 
-          <div>
+          <div className='upload-text-file-functionality'>
             <input type="file" accept=".txt,.pdf,.doc,.docx" onChange={handleFileUpload} />
           </div>
 
-          <div>
+          <div className='refine-prompt-div'>
             <button
               onClick={refinePrompt}
               disabled={isRefining || !originalPrompt.trim()}
@@ -112,27 +113,27 @@ function App() {
           </div>
         </div>
 
-        {refinedPrompt && (
-          <div className="input-section refined-section">
-            <h2>Refined Prompt</h2>
-            <textarea
-              value={refinedPrompt}
-              onChange={(e) => setRefinedPrompt(e.target.value)}
-              placeholder="Refined prompt will appear here"
-              rows={12}
-              cols={80}
-            />
+        <div className="input-section refined-section">
+          <h2>Refined Prompt</h2>
+          <textarea
+            value={refinedPrompt}
+            onChange={(e) => setRefinedPrompt(e.target.value)}
+            placeholder="Refined prompt will appear here"
+            rows={12}
+            cols={80}
+          />
 
-            <div>
-              <button
-                onClick={generateImage}
-                disabled={isGenerating || !refinedPrompt.trim()}
-              >
-                {isGenerating ? 'Generating...' : 'Generate Image'}
-              </button>
-            </div>
+          <div className='generate-img-div'>
+            <button
+              onClick={generateImage}
+              disabled={isGenerating || !refinedPrompt.trim()}
+            >
+              {isGenerating ? 'Generating...' : 'Generate Image'}
+            </button>
           </div>
-        )}
+        </div>
+
+        {/* End of Left column */}
       </div>
 
 
@@ -152,6 +153,7 @@ function App() {
           </div>
         </div>
 
+        {/* End of Right column */}
       </div>
 
       {/* The end div of app-container */}
