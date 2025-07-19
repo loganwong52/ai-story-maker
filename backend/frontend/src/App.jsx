@@ -121,6 +121,7 @@ function App() {
             placeholder="Refined prompt will appear here"
             rows={12}
             cols={80}
+            disabled={!originalPrompt}
           />
 
           <div className='generate-img-div'>
@@ -148,8 +149,10 @@ function App() {
 
               {/* Where the image actually appears */}
               {image && (
-                <img src={image} alt={`AI Generated Image;
-                ${originalPrompt}`} />
+                <img src={image}
+                  alt="AI Generated Image"
+                  title={refinedPrompt}
+                />
               )}
             </div>
           </div>
