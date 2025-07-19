@@ -138,23 +138,25 @@ function App() {
 
 
       {/* Right White Section */}
-      <div className="result-section">
-        <h2>Generated Image</h2>
+      <div className='right-column'>
+        <div className="result-section">
+          <h2>Generated Image</h2>
 
-        <div className="image-bleed">
-          <div className="trim-line"></div>
-          <div className="safe-area">
+          <div className="image-bleed">
+            <div className="trim-line"></div>
+            <div className="safe-area">
 
-            {/* Where the image actually appears */}
-            {image && (
-              <img src={image} alt={`AI Generated Image;
+              {/* Where the image actually appears */}
+              {image && (
+                <img src={image} alt={`AI Generated Image;
                 ${originalPrompt}`} />
-            )}
+              )}
+            </div>
           </div>
         </div>
-
         {/* End of Right column */}
       </div>
+
 
       {/* The end div of app-container */}
     </div>
