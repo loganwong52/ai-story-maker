@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function User_prompt({ originalPrompt, setOriginalPrompt, refinedPrompt, setRefinedPrompt }) {
+function User_prompt({ originalPrompt = "", setOriginalPrompt, refinedPrompt = "", setRefinedPrompt, setImage }) {
     const [isRefining, setIsRefining] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
 

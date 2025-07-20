@@ -3,8 +3,8 @@ import './App.css'
 import User_prompt from './components/module_1';
 
 function App() {
-  const [originalPrompt, setOriginalPrompt] = useState('');
-  const [refinedPrompt, setRefinedPrompt] = useState('');
+  const [originalPrompt, setOriginalPrompt] = useState("");
+  const [refinedPrompt, setRefinedPrompt] = useState("");
   const [image, setImage] = useState('')
 
 
@@ -19,6 +19,7 @@ function App() {
           setOriginalPrompt={setOriginalPrompt}
           refinedPrompt={refinedPrompt}
           setRefinedPrompt={setRefinedPrompt}
+          setImage={setImage}
         />
       </div>
 
