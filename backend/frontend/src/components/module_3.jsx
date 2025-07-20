@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 function NumberDropdown({ selectedNumber = 1, setSelectedNumber, label_text }) {
 
     return (

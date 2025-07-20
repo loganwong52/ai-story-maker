@@ -7,5 +7,4 @@ function Panel(image, refinedPrompt) {
     );
 }
 
-
 export default Panel
