@@ -8,7 +8,7 @@ function App() {
   const [originalPrompt, setOriginalPrompt] = useState("");
   const [refinedPrompt, setRefinedPrompt] = useState("");
   const [image, setImage] = useState(null)
-  const [selectedNumber, setSelectedNumber] = useState(1);
+  const [numOfRows, setNumOfRows] = useState(1);
 
   // A state that's an ARRAY, not a number
   const [columnCounts, setColumnCounts] = useState([1]);
@@ -18,29 +18,30 @@ function App() {
 
 
   // useEffect for the number dropdowns
-  // This "listens" for whenever selectedNumber changes to Update columnCounts
+  // This "listens" for whenever numOfRows changes to Update columnCounts
   // Basically: columnCounts needs to update whenever the number of columns changes, obviously, 
   // BUT ALSO: whenever the number of rows changes too
   useEffect(() => {
-    setColumnCounts(prev => {
+    setColumnCounts(originalColumnCounts => {
       // 1. copy columnCounts
-      const newCounts = [...prev];
+      const newCounts = [...originalColumnCounts];
 
       // Add new rows with 1 column
-      while (newCounts.length < selectedNumber) {
+      while (newCounts.length < numOfRows) {
         newCounts.push(1); // Add new rows with 1 column
       }
 
       // Remove any extra rows
-      while (newCounts.length > selectedNumber) {
+      while (newCounts.length > numOfRows) {
         newCounts.pop();
       }
 
       console.log(newCounts)
-      // Update columnCounts (NOT selectedNumber)
+      // Update columnCounts (NOT numOfRows)
       return newCounts;
     });
-  }, [selectedNumber]);
+  }, [numOfRows]);
+
 
   return (
     <div className="app-container">
@@ -48,22 +49,23 @@ function App() {
       <div className="left-column">
         {/* Dropdowns to choose Row # and Col #s */}
         <NumberDropdown
-          selectedNumber={selectedNumber}
-          setSelectedNumber={setSelectedNumber}
+          selectedNumber={numOfRows}
+          setSelectedNumber={setNumOfRows}
           label_text={"Number of rows:"}
         />
 
         {/* Dynamic dropdowns - map is used, not a for loop */}
-        {Array.from({ length: selectedNumber }).map((_, index) => (
+        {Array.from({ length: numOfRows }).map((_, index) => (
           <NumberDropdown
             key={index}
             selectedNumber={columnCounts[index]}
-            setSelectedNumber={(newValue) => {
+            setSelectedNumber={(numOfCols) => {
               // 1. create a copy of the old array
               const newCounts = [...columnCounts];
               // 2. update the copy
-              newCounts[index] = newValue;
+              newCounts[index] = numOfCols;
               // 3. Replace the entire old array with the new updated version
+              console.log(newCounts)
               setColumnCounts(newCounts);
             }}
             label_text={`Row ${index + 1}; Number of Columns:`}
