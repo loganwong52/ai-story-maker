@@ -16,7 +16,6 @@ function App() {
   // length of columnCounts == Number of Rows
   // Each index's value is the Number of Columns in that corresponding Row
 
-
   // useEffect for the number dropdowns
   // This "listens" for whenever numOfRows changes to Update columnCounts
   // Basically: columnCounts needs to update whenever the number of columns changes, obviously, 
@@ -39,6 +38,15 @@ function App() {
       console.log(newCounts)
       // Update columnCounts (NOT numOfRows)
       return newCounts;
+    });
+  }, [numOfRows]);
+
+  const [columnsPerRow, setColumnsPerRow] = useState([1]); // Array of columns for each row
+  useEffect(() => {
+    setColumnsPerRow(prev => {
+      const newColumns = [...prev.slice(0, numOfRows)];
+      while (newColumns.length < numOfRows) newColumns.push(1);
+      return newColumns;
     });
   }, [numOfRows]);
 
@@ -73,13 +81,30 @@ function App() {
         ))}
 
 
-        <User_prompt
+        {/* GRID */}
+        <div className="grid">
+          {columnCounts.map((colsInRow, rowIndex) => (
+            <div key={`row-${rowIndex}`} className="grid-row">
+              {Array.from({ length: colsInRow }).map((_, colIndex) => {
+                // Calculate cell number (1-9)
+                const cellNumber = rowIndex * 3 + colIndex + 1;
+                return (
+                  <div key={`cell-${colIndex}`} className="grid-cell">
+                    {cellNumber <= 9 ? cellNumber : null}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        {/* <User_prompt
           originalPrompt={originalPrompt}
           setOriginalPrompt={setOriginalPrompt}
           refinedPrompt={refinedPrompt}
           setRefinedPrompt={setRefinedPrompt}
           setImage={setImage}
-        />
+        /> */}
       </div>
 
 
