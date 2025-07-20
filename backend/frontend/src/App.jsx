@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './App.css'
 import User_prompt from './components/module_1';
 import Panel from './components/module_2';
@@ -41,7 +41,9 @@ function App() {
     });
   }, [numOfRows]);
 
+  // Panel
   const [columnsPerRow, setColumnsPerRow] = useState([1]); // Array of columns for each row
+
   useEffect(() => {
     setColumnsPerRow(prev => {
       const newColumns = [...prev.slice(0, numOfRows)];
@@ -49,6 +51,14 @@ function App() {
       return newColumns;
     });
   }, [numOfRows]);
+
+  // useMemo lets you reuse the RESULTS of a function, not the function itself.
+  const panelLabels = useMemo(() => {
+    let counter = 0;
+    return columnCounts.map(colsInRow =>
+      Array(colsInRow).fill().map(() => `Panel ${++counter}`)
+    );
+  }, [columnCounts]);
 
 
   return (
