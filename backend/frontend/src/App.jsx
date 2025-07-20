@@ -90,7 +90,19 @@ function App() {
                 const cellNumber = rowIndex * 3 + colIndex + 1;
                 return (
                   <div key={`cell-${colIndex}`} className="grid-cell">
-                    {cellNumber <= 9 ? cellNumber : null}
+                    {/* {cellNumber <= 9 ? cellNumber : null} */}
+                    <div>
+                      <h1>Panel {cellNumber}</h1>
+                      {/* <User_prompt
+                        originalPrompt={originalPrompt}
+                        setOriginalPrompt={setOriginalPrompt}
+                        refinedPrompt={refinedPrompt}
+                        setRefinedPrompt={setRefinedPrompt}
+                        setImage={setImage}
+                      /> */}
+
+                    </div>
+
                   </div>
                 );
               })}
