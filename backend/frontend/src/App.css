@@ -125,6 +125,18 @@ img {
   white-space: nowrap;
 }
 
+.cell-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.panel-header {
+  margin: 0;
+  align-self: flex-start;
+}
+
 
 
 
