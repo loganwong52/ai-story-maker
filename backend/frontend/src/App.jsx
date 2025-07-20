@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import './App.css'
 import User_prompt from './components/module_1';
+import Panel from './components/module_2';
 
 function App() {
   const [originalPrompt, setOriginalPrompt] = useState("");
   const [refinedPrompt, setRefinedPrompt] = useState("");
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState(null)
 
 
 
@@ -34,12 +35,13 @@ function App() {
             <div className="safe-area">
 
               {/* Where the image actually appears */}
-              {image && (
-                <img src={image}
-                  alt="AI Generated Image"
-                  title={refinedPrompt}
+              {image &&
+                <Panel
+                  image={image}
+                  refinedPrompt={refinedPrompt}
                 />
-              )}
+              }
+
             </div>
           </div>
         </div>
@@ -48,7 +50,7 @@ function App() {
 
 
       {/* The end div of app-container */}
-    </div>
+    </div >
   );
 }
 
