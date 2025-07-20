@@ -10,6 +10,37 @@ function App() {
   const [image, setImage] = useState(null)
   const [selectedNumber, setSelectedNumber] = useState(1);
 
+  // A state that's an ARRAY, not a number
+  const [columnCounts, setColumnCounts] = useState([1]);
+  // columnCounts is an array
+  // length of columnCounts == Number of Rows
+  // Each index's value is the Number of Columns in that corresponding Row
+
+
+  // useEffect for the number dropdowns
+  // This "listens" for whenever selectedNumber changes to Update columnCounts
+  // Basically: columnCounts needs to update whenever the number of columns changes, obviously, 
+  // BUT ALSO: whenever the number of rows changes too
+  useEffect(() => {
+    setColumnCounts(prev => {
+      // 1. copy columnCounts
+      const newCounts = [...prev];
+
+      // Add new rows with 1 column
+      while (newCounts.length < selectedNumber) {
+        newCounts.push(1); // Add new rows with 1 column
+      }
+
+      // Remove any extra rows
+      while (newCounts.length > selectedNumber) {
+        newCounts.pop();
+      }
+
+      console.log(newCounts)
+      // Update columnCounts (NOT selectedNumber)
+      return newCounts;
+    });
+  }, [selectedNumber]);
 
   return (
     <div className="app-container">
@@ -22,12 +53,19 @@ function App() {
           label_text={"Number of rows:"}
         />
 
-        {/* Dynamic dropdowns - using map instead of for loop */}
+        {/* Dynamic dropdowns - map is used, not a for loop */}
         {Array.from({ length: selectedNumber }).map((_, index) => (
           <NumberDropdown
-            key={index}  // Important for React's reconciliation
-            selectedNumber={1}  // Temporary static value
-            setSelectedNumber={() => { }}  // Temporary empty function
+            key={index}
+            selectedNumber={columnCounts[index]}
+            setSelectedNumber={(newValue) => {
+              // 1. create a copy of the old array
+              const newCounts = [...columnCounts];
+              // 2. update the copy
+              newCounts[index] = newValue;
+              // 3. Replace the entire old array with the new updated version
+              setColumnCounts(newCounts);
+            }}
             label_text={`Row ${index + 1}; Number of Columns:`}
           />
         ))}
