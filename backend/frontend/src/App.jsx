@@ -42,24 +42,9 @@ function App() {
   }, [numOfRows]);
 
   // Panel
-  const [columnsPerRow, setColumnsPerRow] = useState([1]); // Array of columns for each row
-
-  useEffect(() => {
-    setColumnsPerRow(prev => {
-      const newColumns = [...prev.slice(0, numOfRows)];
-      while (newColumns.length < numOfRows) newColumns.push(1);
-      return newColumns;
-    });
-  }, [numOfRows]);
-
   // useMemo lets you reuse the RESULTS of a function, not the function itself.
-  const panelLabels = useMemo(() => {
-    let counter = 0;
-    return columnCounts.map(colsInRow =>
-      Array(colsInRow).fill().map(() => `Panel ${++counter}`)
-    );
-  }, [columnCounts]);
-
+  const panelLabels = useMemo(() => myFunction(columnCounts), [columnCounts]);
+  console.log(panelLabels)
 
   return (
     <div className="app-container">
@@ -96,13 +81,13 @@ function App() {
           {columnCounts.map((colsInRow, rowIndex) => (
             <div key={`row-${rowIndex}`} className="grid-row">
               {Array.from({ length: colsInRow }).map((_, colIndex) => {
-                // Calculate cell number (1-9)
-                const cellNumber = rowIndex * 3 + colIndex + 1;
+                // Extract the Panel label given the row and col indices
+                const panelLabel = panelLabels[rowIndex][colIndex]
                 return (
-                  <div className="cell-container">
-                    <h3 className="panel-header">Panel {cellNumber}</h3>
+                  <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
+                    <h3 className="panel-header">{panelLabel}</h3>
 
-                    <div key={`cell-${colIndex}`} className="grid-cell">
+                    <div key={`cell-${rowIndex}, ${colIndex}`} className="grid-cell">
                       <p>
                         stuff will go here
                       </p>
@@ -151,6 +136,33 @@ function App() {
       {/* The end div of app-container */}
     </div >
   );
+}
+
+
+// const myFunction(columnCounts){
+//   let counter = 0;
+//   return columnCounts.map(colsInRow =>
+//     Array(colsInRow).fill().map(() => `Panel ${++counter}`)
+//   );
+// }
+
+function myFunction(columnCounts) {
+  var panelCounter = 0;
+  var panelLayout = [];
+
+  for (var i = 0; i < columnCounts.length; i++) {
+    var columnsInRow = columnCounts[i];
+    var rowPanels = [];
+
+    for (var j = 0; j < columnsInRow; j++) {
+      panelCounter++;
+      rowPanels.push("Panel " + panelCounter);
+    }
+
+    panelLayout.push(rowPanels);
+  }
+
+  return panelLayout;
 }
 
 export default App
