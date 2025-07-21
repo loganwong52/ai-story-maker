@@ -16,35 +16,17 @@ function App() {
   // length of columnCounts == Number of Rows
   // Each index's value is the Number of Columns in that corresponding Row
 
-  // useEffect for the number dropdowns
+  // The number dropdowns
   // This "listens" for whenever numOfRows changes to Update columnCounts
   // Basically: columnCounts needs to update whenever the number of columns changes, obviously, 
   // BUT ALSO: whenever the number of rows changes too
   useEffect(() => {
-    setColumnCounts(originalColumnCounts => {
-      // 1. copy columnCounts
-      const newCounts = [...originalColumnCounts];
-
-      // Add new rows with 1 column
-      while (newCounts.length < numOfRows) {
-        newCounts.push(1); // Add new rows with 1 column
-      }
-
-      // Remove any extra rows
-      while (newCounts.length > numOfRows) {
-        newCounts.pop();
-      }
-
-      console.log(newCounts)
-      // Update columnCounts (NOT numOfRows)
-      return newCounts;
-    });
+    setColumnCounts(originalColumnCounts => updateColumnCounts(originalColumnCounts, numOfRows));
   }, [numOfRows]);
 
   // Panel
   // useMemo lets you reuse the RESULTS of a function, not the function itself.
-  const panelLabels = useMemo(() => myFunction(columnCounts), [columnCounts]);
-  console.log(panelLabels)
+  const panelLabels = useMemo(() => updatePanelLayout(columnCounts), [columnCounts]);
 
   return (
     <div className="app-container">
@@ -68,7 +50,6 @@ function App() {
               // 2. update the copy
               newCounts[index] = numOfCols;
               // 3. Replace the entire old array with the new updated version
-              console.log(newCounts)
               setColumnCounts(newCounts);
             }}
             label_text={`Row ${index + 1}; Number of Columns:`}
@@ -138,15 +119,26 @@ function App() {
   );
 }
 
+function updateColumnCounts(originalColumnCounts, numOfRows) {
+  // Copy columnCounts
+  const newCounts = [...originalColumnCounts];
 
-// const myFunction(columnCounts){
-//   let counter = 0;
-//   return columnCounts.map(colsInRow =>
-//     Array(colsInRow).fill().map(() => `Panel ${++counter}`)
-//   );
-// }
+  // Add new rows with 1 column
+  while (newCounts.length < numOfRows) {
+    newCounts.push(1);
+  }
 
-function myFunction(columnCounts) {
+  // Remove any extra rows
+  while (newCounts.length > numOfRows) {
+    newCounts.pop();
+  }
+
+  // Update columnCounts (NOT numOfRows)
+  return newCounts;
+}
+
+function updatePanelLayout(columnCounts) {
+  // Nested for loop to count/label panels 1 thru 9 appropriately
   var panelCounter = 0;
   var panelLayout = [];
 
@@ -158,10 +150,8 @@ function myFunction(columnCounts) {
       panelCounter++;
       rowPanels.push("Panel " + panelCounter);
     }
-
     panelLayout.push(rowPanels);
   }
-
   return panelLayout;
 }
 
