@@ -156,7 +156,7 @@ function App() {
                           return (
                             module?.visible && module?.image &&
                             <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
-                              <h3 style={{ color: 'black' }} className="panel-header">{panelLabel} </h3>
+                              {/* <h3 style={{ color: 'black' }} className="panel-header">{panelLabel} </h3> */}
                               < Panel
                                 modules={modules}
                                 activePanelId={panelId}

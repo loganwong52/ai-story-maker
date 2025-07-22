@@ -132,8 +132,8 @@ def generate_image(request):
             return JsonResponse({"error": "No prompt provided"}, status=400)
 
         output = client.run("black-forest-labs/flux-schnell", input={"prompt": prompt})
-        print(type(output))
-        print(f"OUTPUT: {output}")
+        # print(type(output))
+        # print(f"OUTPUT: {output}")
         # image_url = output[0].url()
         image_url = output[0]
         if hasattr(image_url, "__str__"):

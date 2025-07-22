@@ -18,7 +18,7 @@ function Panel({ modules, activePanelId }) {
     // console.log(refinedPrompt)
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="panel-image-container">
             <img src={panel_image}
                 alt="AI Generated Image"
                 title={refinedPrompt}
