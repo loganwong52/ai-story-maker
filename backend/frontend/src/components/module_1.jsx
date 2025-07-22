@@ -217,7 +217,10 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
                 body: JSON.stringify({ prompt: refinedPrompt })
             });
             const data = await response.json();
+            // Add image to dictionary in list
             updateModule('image', `data:image/jpeg;base64,${data.image_base64}`);
+            // set boolean in the dictionary in the list
+            updateModule('visible', true);
 
             // Successful API call:
             setActivePanelId(panelId);

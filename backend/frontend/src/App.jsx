@@ -15,7 +15,8 @@ function App() {
           panelId: `row-${row}-col-${col}`,
           originalPrompt: "",
           refinedPrompt: "",
-          image: null
+          image: null,
+          visible: false
         });
       }
     }
@@ -153,15 +154,16 @@ function App() {
                           const module = modules.find((m) => m.panelId === panelId);
 
                           return (
+                            module?.visible && module?.image &&
                             <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
                               <h3 style={{ color: 'black' }} className="panel-header">{panelLabel} </h3>
                               < Panel
                                 modules={modules}
                                 activePanelId={panelId}
                               />
-                              <h3 style={{ color: 'black' }}>
+                              {/* <h3 style={{ color: 'black' }}>
                                 {panelId}
-                              </h3>
+                              </h3> */}
                               {/* <h3 style={{ color: 'black' }}>
                                 {modules.find(m => m.panelId === activePanelId).originalPrompt}
                               </h3> */}
