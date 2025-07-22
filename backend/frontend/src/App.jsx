@@ -80,13 +80,13 @@ function App() {
           ))}
         </div>
 
-        {/* <User_prompt
+        <User_prompt
           originalPrompt={originalPrompt}
           setOriginalPrompt={setOriginalPrompt}
           refinedPrompt={refinedPrompt}
           setRefinedPrompt={setRefinedPrompt}
           setImage={setImage}
-        /> */}
+        />
       </div>
 
 
