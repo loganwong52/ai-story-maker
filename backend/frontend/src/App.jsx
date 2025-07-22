@@ -5,9 +5,32 @@ import Panel from './components/module_2';
 import NumberDropdown from './components/module_3';
 
 function App() {
-  const [originalPrompt, setOriginalPrompt] = useState("");
-  const [refinedPrompt, setRefinedPrompt] = useState("");
-  const [image, setImage] = useState(null)
+  // const [originalPrompt, setOriginalPrompt] = useState("");
+  // const [refinedPrompt, setRefinedPrompt] = useState("");
+  // const [image, setImage] = useState(null)
+
+  // list of dictionaries
+  // Initialize with all possible modules (e.g., 3x3 grid = 9 modules)
+  const [modules, setModules] = useState(() => {
+    const initialModules = [];
+    for (let row = 1; row <= 3; row++) { // Adjust max rows as needed
+      for (let col = 1; col <= 3; col++) { // Adjust max columns as needed
+        initialModules.push({
+          panelId: `row-${row}-col-${col}`,
+          originalPrompt: "",
+          refinedPrompt: "",
+          image: null
+        });
+      }
+    }
+    return initialModules;
+  });
+  //   {
+  //   "panelId": "row-1-col-1",
+  //   "originalPrompt": "",
+  //   "refinedPrompt": "",
+  //   "image": null
+  // }
   const [numOfRows, setNumOfRows] = useState(1);
 
   // A state that's an ARRAY, not a number
@@ -27,6 +50,29 @@ function App() {
   // Panel
   // useMemo lets you reuse the RESULTS of a function, not the function itself.
   const panelLabels = useMemo(() => updatePanelLayout(columnCounts), [columnCounts]);
+
+
+  // Populate list with modules
+  // useEffect(() => {
+  //   const newModules = [];
+  //   columnCounts.forEach((colsInRow, rowIndex) => {
+  //     Array.from({ length: colsInRow }).forEach((_, colIndex) => {
+  //       const panelId = `row-${rowIndex}-col-${colIndex}`;
+  //       // Reuse existing module or create a new one
+  //       const existingModule = modules.find((m) => m.panelId === panelId);
+  //       newModules.push(
+  //         existingModule || {
+  //           panelId,
+  //           originalPrompt: "",
+  //           refinedPrompt: "",
+  //           image: null
+  //         }
+  //       );
+  //     });
+  //   });
+  //   setModules(newModules);
+  // }, [columnCounts, numOfRows]);
+
 
   return (
     <div className="app-container">
@@ -64,14 +110,32 @@ function App() {
               {Array.from({ length: colsInRow }).map((_, colIndex) => {
                 // Extract the Panel label given the row and col indices
                 const panelLabel = panelLabels[rowIndex][colIndex]
+
+                // Create the "key"
+                const panelId = `row-${rowIndex + 1}-col-${colIndex + 1}`;
+                // console.log(panelId)
+                // Find module by ID; .find searches array, finds 1st module whose panelID is panelId
+                // module is a dict, since modules is a list of dicts
+                // console.log(modules)
+                const module = modules.find((m) => m.panelId === panelId);
+                // console.log(module)
+
                 return (
                   <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
                     <h3 className="panel-header">{panelLabel}</h3>
 
                     <div key={`cell-${rowIndex}, ${colIndex}`} className="grid-cell">
-                      <p>
-                        stuff will go here
-                      </p>
+                      <User_prompt
+                        originalPrompt={module.originalPrompt}
+                        refinedPrompt={module.refinedPrompt}
+
+                        // setOriginalPrompt={setOriginalPrompt}
+                        // setRefinedPrompt={setRefinedPrompt}
+                        // setImage={setImage}
+                        panelId={panelId}
+                        modules={modules}
+                        setModules={setModules}
+                      />
                     </div>
                   </div>
                 );
@@ -80,13 +144,7 @@ function App() {
           ))}
         </div>
 
-        <User_prompt
-          originalPrompt={originalPrompt}
-          setOriginalPrompt={setOriginalPrompt}
-          refinedPrompt={refinedPrompt}
-          setRefinedPrompt={setRefinedPrompt}
-          setImage={setImage}
-        />
+
       </div>
 
 
@@ -100,12 +158,12 @@ function App() {
             <div className="safe-area">
 
               {/* Where the image actually appears */}
-              {image &&
+              {/* {image &&
                 <Panel
                   image={image}
                   refinedPrompt={refinedPrompt}
                 />
-              }
+              } */}
 
             </div>
           </div>

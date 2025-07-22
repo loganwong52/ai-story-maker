@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 function Panel(image, refinedPrompt) {
-    const [hasBorder, setHasBorder] = useState(false);
+    const [hasBorder, setHasBorder] = useState(true);
 
     const toggleBorder = () => {
         setHasBorder(!hasBorder);
@@ -23,7 +23,7 @@ function Panel(image, refinedPrompt) {
                     checked={hasBorder}
                     onChange={toggleBorder}
                 />
-                Show border
+                Border on/off
             </label>
         </div>
 

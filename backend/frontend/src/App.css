@@ -1,5 +1,6 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -64,12 +65,12 @@ img {
 .left-column {
   flex: 1;
   position: relative;
-  padding-right: 20px;
+  padding: 20px;
 }
 
 .right-column {
   flex: 1;
-  padding-left: 20px;
+  padding: 20px;
 }
 
 /* vertical divider line between the sections */
@@ -84,9 +85,36 @@ img {
 }
 
 .input-section {
-  margin-bottom: 20px;
-  /* Space between input sections */
+  display: grid;
+  gap: 20px;
+
 }
+
+.input-section h5 {
+  margin: 0px;
+}
+
+.original-prompt-section,
+.refined-prompt-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Force textarea to expand to full width */
+.original-prompt-section textarea,
+.refined-prompt-section textarea {
+  width: 100%;
+  box-sizing: border-box;
+  /* Ensures padding doesn't affect width */
+}
+
+.upload-text-file-functionality {
+  display: flex;
+  justify-content: center;
+  /* padding-left: 20px; */
+}
+
 
 .result-section {
   display: flex;
@@ -101,7 +129,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .grid-row {
@@ -113,7 +141,7 @@ img {
 .grid-cell {
   min-width: 50px;
   min-height: 50px;
-  padding: 15px;
+  padding: 5px;
   border: 1px solid #ccc;
   display: flex;
   align-items: center;
@@ -129,7 +157,6 @@ img {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
 }
 
 .panel-header {
