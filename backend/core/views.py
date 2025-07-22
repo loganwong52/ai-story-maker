@@ -11,6 +11,9 @@ from django.core.files.storage import default_storage
 from PyPDF2 import PdfReader
 from docx import Document
 
+import replicate
+import traceback
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -59,40 +62,92 @@ def refine_prompt(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+# @api_view(["POST"])  # this endpoint only accepts POST requests
+# def generate_image(request):
+#     try:
+#         # 3. (Next we'll add RAG and image generation)
+#         # vector_db = Chroma(persist_directory="./chroma_data")  # Local vector store
+
+#         # 4. Send the refined prompt to a model to GENERATE AN IMAGE
+#         api_key = os.getenv("REPLICATE_KEY")
+#         client = replicate.Client(api_token=f"{api_key}")
+
+#         link = "black-forest-labs/flux-schnell:latest"
+#         refined_prompt = request.data.get("prompt", "")
+
+#         output = client.run(
+#             link,
+#             input={"prompt": refined_prompt},
+#         )
+#         print(output)  # This will be a URL or list of URLs to images
+
+#         #     link = "https://api.deepai.org/api/text2img"
+#         #     response = requests.post(
+#         #         link,
+#         #         data={"text": refined_prompt},
+#         #         headers={"api-key": f"{os.getenv('REPLICATE_KEY')}"},
+#         #     )
+#         #     response.raise_for_status()
+#         # Get the image URL
+#         # image_url = response.json()["output_url"]
+
+#         image_url = output
+#         if isinstance(output, list):
+#             image_url = output[0]
+#         image_response = requests.get(image_url)
+#         image_response.raise_for_status()
+
+#         # Get the image & turn it into text format
+#         encoded_image = base64.b64encode(image_response.content).decode("utf-8")
+
+#         return JsonResponse(
+#             {
+#                 "status": "success",
+#                 "refined_prompt": refined_prompt,
+#                 "image_base64": encoded_image,  # encoded image data
+#             }
+#         )
+
+#     except Exception as e:
+#         traceback_str = traceback.format_exc()
+#         traceback.print_exc()
+#         print("Error:", traceback_str)
+#         return JsonResponse({"error": str(e), "trace": traceback_str}, status=500)
+
+
 @api_view(["POST"])  # this endpoint only accepts POST requests
 def generate_image(request):
     try:
-        # 3. (Next we'll add RAG and image generation)
-        # vector_db = Chroma(persist_directory="./chroma_data")  # Local vector store
+        api_token = os.getenv("REPLICATE_KEY")
+        if not api_token:
+            return JsonResponse(
+                {"error": "Missing REPLICATE_API_TOKEN environment variable"},
+                status=400,
+            )
 
-        # 4. Send the refined prompt to a model to GENERATE AN IMAGE
-        refined_prompt = request.data.get("prompt", "")
+        client = replicate.Client(api_token=api_token)
 
-        link = "https://api.deepai.org/api/text2img"
-        response = requests.post(
-            link,
-            data={"text": refined_prompt},
-            headers={"api-key": f"{os.getenv('DEEPAI_KEY')}"},
-        )
-        response.raise_for_status()
+        prompt = request.data.get("prompt", "")
+        if not prompt:
+            return JsonResponse({"error": "No prompt provided"}, status=400)
 
-        # Get the image URL
-        image_url = response.json()["output_url"]
-        image_response = requests.get(image_url)
-        image_response.raise_for_status()
+        output = client.run("black-forest-labs/flux-schnell", input={"prompt": prompt})
+        print(type(output))
+        print(f"OUTPUT: {output}")
+        # image_url = output[0].url()
+        image_url = output[0]
+        if hasattr(image_url, "__str__"):
+            image_url = str(image_url)
+        else:
+            image_url = None
 
-        # Get the image & turn it into text format
-        encoded_image = base64.b64encode(image_response.content).decode("utf-8")
-
-        return JsonResponse(
-            {
-                "status": "success",
-                "refined_prompt": refined_prompt,
-                "image_base64": encoded_image,  # encoded image data
-            }
-        )
+        return JsonResponse({"status": "success", "image_url": image_url})
 
     except Exception as e:
+        # Print full traceback to console for debugging
+        traceback.print_exc()
+
+        # Return error message as JSON response so frontend can read it
         return JsonResponse({"error": str(e)}, status=500)
 
 

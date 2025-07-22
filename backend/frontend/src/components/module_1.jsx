@@ -216,9 +216,22 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt: refinedPrompt })
             });
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch {
+                throw new Error("Server returned invalid JSON");
+            }
+
+            if (!response.ok) {
+                throw new Error(data.error || "Image generation failed");
+            }
+
+
+            // Success
             // Add image to dictionary in list
-            updateModule('image', `data:image/jpeg;base64,${data.image_base64}`);
+            // updateModule('image', `data:image/jpeg;base64,${data.image_base64}`);
+            updateModule('image', data.image_url);
             // set boolean in the dictionary in the list
             updateModule('visible', true);
 
