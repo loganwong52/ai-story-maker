@@ -133,9 +133,9 @@ function App() {
             <div className="safe-area">
 
               {/* Where the image actually appears */}
-              {console.log("activePanelId:" + activePanelId)}
-              {console.log("Module:" + modules.find(m => m.panelId === activePanelId))}
-              {console.log(modules.find(m => m.panelId === activePanelId)?.image)}
+              {/* {console.log("activePanelId:" + activePanelId)} */}
+              {/* {console.log("Module:" + modules.find(m => m.panelId === activePanelId))} */}
+              {/* {console.log(modules.find(m => m.panelId === activePanelId)?.image)} */}
 
               {modules.find(m => m.panelId === activePanelId)?.image && (
                 <div>

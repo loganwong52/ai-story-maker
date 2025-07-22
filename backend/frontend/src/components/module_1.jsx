@@ -204,7 +204,7 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
     };
 
     const generateImage = async () => {
-        console.log(refinedPrompt)
+        // console.log(refinedPrompt)
 
         // Check if refined prompt is empty
         if (!refinedPrompt.trim()) return;

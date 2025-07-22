@@ -15,7 +15,7 @@ function Panel({ modules, activePanelId }) {
         setHasBorder(!hasBorder);
     };
 
-    console.log(refinedPrompt)
+    // console.log(refinedPrompt)
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
