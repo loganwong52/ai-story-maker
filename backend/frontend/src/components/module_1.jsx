@@ -220,7 +220,7 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
             updateModule('image', `data:image/jpeg;base64,${data.image_base64}`);
 
             // Successful API call:
-            setActivePanelId(panelId);  // <-- Ensure this line exists
+            setActivePanelId(panelId);
 
         } catch (error) {
             console.error("Generation failed:", error);
@@ -268,8 +268,6 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
                 <div className='generate-img-div'>
                     <button
                         onClick={generateImage}
-                        // pass setActivePanelId into generateImage to know which image which button should generate
-                        // onClick={() => generateImage(setActivePanelId)}
                         disabled={isGenerating || !refinedPrompt.trim()}
                     >
                         {isGenerating ? 'Generating...' : 'Generate Image'}

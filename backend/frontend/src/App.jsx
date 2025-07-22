@@ -5,10 +5,6 @@ import Panel from './components/module_2';
 import NumberDropdown from './components/module_3';
 
 function App() {
-  // const [originalPrompt, setOriginalPrompt] = useState("");
-  // const [refinedPrompt, setRefinedPrompt] = useState("");
-  // const [image, setImage] = useState(null)
-
   // list of dictionaries
   // Initialize with all possible modules (e.g., 3x3 grid = 9 modules)
   const [modules, setModules] = useState(() => {
@@ -49,7 +45,7 @@ function App() {
 
   // Track the "active" panel
   // store which panel's (panelId) image should be shown in the right column
-  const [activePanelId, setActivePanelId] = useState(null);
+  const [activePanelId, setActivePanelId] = useState("row-1-col-1");
 
   // Initialize activePanelId to the first module's ID on first render
   useEffect(() => {
@@ -89,7 +85,7 @@ function App() {
         ))}
 
 
-        {/* GRID */}
+        {/* LEFT GRID */}
         <div className="grid">
           {columnCounts.map((colsInRow, rowIndex) => (
             <div key={`row-${rowIndex}`} className="grid-row">
@@ -99,12 +95,9 @@ function App() {
 
                 // Create the "key"
                 const panelId = `row-${rowIndex + 1}-col-${colIndex + 1}`;
-                // console.log(panelId)
                 // Find module by ID; .find searches array, finds 1st module whose panelID is panelId
                 // module is a dict, since modules is a list of dicts
-                // console.log(modules)
                 const module = modules.find((m) => m.panelId === panelId);
-                // console.log(module)
 
                 return (
                   <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
@@ -112,12 +105,6 @@ function App() {
 
                     <div key={`cell-${rowIndex}, ${colIndex}`} className="grid-cell">
                       <User_prompt
-                        // originalPrompt={module.originalPrompt}
-                        // refinedPrompt={module.refinedPrompt}
-
-                        // setOriginalPrompt={setOriginalPrompt}
-                        // setRefinedPrompt={setRefinedPrompt}
-                        // setImage={setImage}
                         panelId={panelId}
                         modules={modules}
                         setModules={setModules}
@@ -130,6 +117,8 @@ function App() {
             </div>
           ))}
         </div>
+
+        {/* End of Left column */}
       </div>
 
 
@@ -143,37 +132,58 @@ function App() {
             <div className="safe-area">
 
               {/* Where the image actually appears */}
-              {/* {image &&
-                <Panel
-                  image={image}
-                  refinedPrompt={refinedPrompt}
-                />
-              } */}
-              {
-                modules.find(m => m.panelId === activePanelId)?.image && (
-                  <div>
-                    < Panel
-                      modules={modules}
-                      activePanelId={activePanelId}
-                    // image={modules.find(m => m.panelId === activePanelId).image}
-                    // refinedPrompt={modules.find(m => m.panelId === activePanelId).refinedPrompt}
-                    />
-                    <h1 style={{ color: 'black' }}>
-                      {activePanelId}
-                    </h1>
-                    <h2 style={{ color: 'black' }}>
-                      {modules.find(m => m.panelId === activePanelId).refinedPrompt}
-                    </h2>
+              {console.log("activePanelId:" + activePanelId)}
+              {console.log("Module:" + modules.find(m => m.panelId === activePanelId))}
+              {console.log(modules.find(m => m.panelId === activePanelId)?.image)}
+
+              {modules.find(m => m.panelId === activePanelId)?.image && (
+                <div>
+                  {/* RIGHT GRID */}
+                  <div className="grid">
+                    {columnCounts.map((colsInRow, rowIndex) => (
+                      <div key={`row-${rowIndex}`} className="grid-row">
+                        {Array.from({ length: colsInRow }).map((_, colIndex) => {
+                          // Extract the Panel label given the row and col indices
+                          const panelLabel = panelLabels[rowIndex][colIndex]
+
+                          // Create the "key"
+                          const panelId = `row-${rowIndex + 1}-col-${colIndex + 1}`;
+                          // Find module by ID; .find searches array, finds 1st module whose panelID is panelId
+                          // module is a dict, since modules is a list of dicts
+                          const module = modules.find((m) => m.panelId === panelId);
+
+                          return (
+                            <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
+                              <h3 style={{ color: 'black' }} className="panel-header">{panelLabel} </h3>
+                              < Panel
+                                modules={modules}
+                                activePanelId={panelId}
+                              />
+                              <h3 style={{ color: 'black' }}>
+                                {panelId}
+                              </h3>
+                              {/* <h3 style={{ color: 'black' }}>
+                                {modules.find(m => m.panelId === activePanelId).originalPrompt}
+                              </h3> */}
+                              {/* <h6 style={{ color: 'black' }}>
+                                {modules.find(m => m.panelId === activePanelId).refinedPrompt}
+                              </h6> */}
+
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ))}
                   </div>
-                )
-              }
+
+                </div>
+              )}
 
             </div>
           </div>
         </div>
         {/* End of Right column */}
       </div>
-
 
       {/* The end div of app-container */}
     </div >
