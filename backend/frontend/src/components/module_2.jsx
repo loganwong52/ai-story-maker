@@ -1,20 +1,31 @@
 import { useState } from 'react';
 
-function Panel(image, refinedPrompt) {
+// function Panel(image, refinedPrompt) {
+function Panel({ modules, activePanelId }) {
+    // console.log(typeof modules)
+    // console.log(modules)
+    // console.log(activePanelId)
+
+    const panel_image = modules.find(m => m.panelId === activePanelId).image
+    const refinedPrompt = modules.find(m => m.panelId === activePanelId).refinedPrompt
+
     const [hasBorder, setHasBorder] = useState(true);
 
     const toggleBorder = () => {
         setHasBorder(!hasBorder);
     };
 
+    console.log(refinedPrompt)
+
     return (
         <div>
-            <img src={image}
+            <img src={panel_image}
                 alt="AI Generated Image"
                 title={refinedPrompt}
                 style={{
                     border: hasBorder ? '3px solid black' : 'none',
                 }}
+                className='panel-image'
             />
 
             <label style={{ color: 'black' }}>

@@ -153,8 +153,10 @@ function App() {
                 modules.find(m => m.panelId === activePanelId)?.image && (
                   <div>
                     < Panel
-                      image={modules.find(m => m.panelId === activePanelId).image}
-                      refinedPrompt={modules.find(m => m.panelId === activePanelId).refinedPrompt}
+                      modules={modules}
+                      activePanelId={activePanelId}
+                    // image={modules.find(m => m.panelId === activePanelId).image}
+                    // refinedPrompt={modules.find(m => m.panelId === activePanelId).refinedPrompt}
                     />
                     <h1 style={{ color: 'black' }}>
                       {activePanelId}
