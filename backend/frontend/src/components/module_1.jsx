@@ -129,8 +129,11 @@
 
 import { useState } from 'react';
 // setOriginalPrompt, setRefinedPrompt, setImage
-function User_prompt({ originalPrompt = "", refinedPrompt = "", panelId = 0, modules = [], setModules, setActivePanelId }) {
+function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }) {
     const module = modules.find((m) => m.panelId === panelId);
+
+    const originalPrompt = module.originalPrompt
+    const refinedPrompt = module.refinedPrompt
 
     const [isRefining, setIsRefining] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);

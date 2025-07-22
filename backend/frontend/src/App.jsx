@@ -112,8 +112,8 @@ function App() {
 
                     <div key={`cell-${rowIndex}, ${colIndex}`} className="grid-cell">
                       <User_prompt
-                        originalPrompt={module.originalPrompt}
-                        refinedPrompt={module.refinedPrompt}
+                        // originalPrompt={module.originalPrompt}
+                        // refinedPrompt={module.refinedPrompt}
 
                         // setOriginalPrompt={setOriginalPrompt}
                         // setRefinedPrompt={setRefinedPrompt}
