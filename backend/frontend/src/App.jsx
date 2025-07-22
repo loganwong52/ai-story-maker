@@ -25,14 +25,9 @@ function App() {
     }
     return initialModules;
   });
-  //   {
-  //   "panelId": "row-1-col-1",
-  //   "originalPrompt": "",
-  //   "refinedPrompt": "",
-  //   "image": null
-  // }
-  const [numOfRows, setNumOfRows] = useState(1);
 
+
+  const [numOfRows, setNumOfRows] = useState(1);
   // A state that's an ARRAY, not a number
   const [columnCounts, setColumnCounts] = useState([1]);
   // columnCounts is an array
@@ -52,26 +47,17 @@ function App() {
   const panelLabels = useMemo(() => updatePanelLayout(columnCounts), [columnCounts]);
 
 
-  // Populate list with modules
-  // useEffect(() => {
-  //   const newModules = [];
-  //   columnCounts.forEach((colsInRow, rowIndex) => {
-  //     Array.from({ length: colsInRow }).forEach((_, colIndex) => {
-  //       const panelId = `row-${rowIndex}-col-${colIndex}`;
-  //       // Reuse existing module or create a new one
-  //       const existingModule = modules.find((m) => m.panelId === panelId);
-  //       newModules.push(
-  //         existingModule || {
-  //           panelId,
-  //           originalPrompt: "",
-  //           refinedPrompt: "",
-  //           image: null
-  //         }
-  //       );
-  //     });
-  //   });
-  //   setModules(newModules);
-  // }, [columnCounts, numOfRows]);
+  // Track the "active" panel
+  // store which panel's (panelId) image should be shown in the right column
+  const [activePanelId, setActivePanelId] = useState(null);
+
+  // Initialize activePanelId to the first module's ID on first render
+  useEffect(() => {
+    if (modules.length > 0 && !activePanelId) {
+      // Activate the first module
+      setActivePanelId(modules[0].panelId);
+    }
+  }, [modules]);
 
 
   return (
@@ -135,6 +121,7 @@ function App() {
                         panelId={panelId}
                         modules={modules}
                         setModules={setModules}
+                        setActivePanelId={setActivePanelId}
                       />
                     </div>
                   </div>
@@ -143,8 +130,6 @@ function App() {
             </div>
           ))}
         </div>
-
-
       </div>
 
 
@@ -164,6 +149,22 @@ function App() {
                   refinedPrompt={refinedPrompt}
                 />
               } */}
+              {
+                modules.find(m => m.panelId === activePanelId)?.image && (
+                  <div>
+                    < Panel
+                      image={modules.find(m => m.panelId === activePanelId).image}
+                      refinedPrompt={modules.find(m => m.panelId === activePanelId).refinedPrompt}
+                    />
+                    <h1 style={{ color: 'black' }}>
+                      {activePanelId}
+                    </h1>
+                    <h2 style={{ color: 'black' }}>
+                      {modules.find(m => m.panelId === activePanelId).refinedPrompt}
+                    </h2>
+                  </div>
+                )
+              }
 
             </div>
           </div>

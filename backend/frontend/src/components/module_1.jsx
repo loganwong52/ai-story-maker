@@ -129,7 +129,7 @@
 
 import { useState } from 'react';
 // setOriginalPrompt, setRefinedPrompt, setImage
-function User_prompt({ originalPrompt = "", refinedPrompt = "", panelId = 0, modules = [], setModules }) {
+function User_prompt({ originalPrompt = "", refinedPrompt = "", panelId = 0, modules = [], setModules, setActivePanelId }) {
     const module = modules.find((m) => m.panelId === panelId);
 
     const [isRefining, setIsRefining] = useState(false);
@@ -201,6 +201,8 @@ function User_prompt({ originalPrompt = "", refinedPrompt = "", panelId = 0, mod
     };
 
     const generateImage = async () => {
+        console.log(refinedPrompt)
+
         // Check if refined prompt is empty
         if (!refinedPrompt.trim()) return;
 
@@ -213,6 +215,9 @@ function User_prompt({ originalPrompt = "", refinedPrompt = "", panelId = 0, mod
             });
             const data = await response.json();
             updateModule('image', `data:image/jpeg;base64,${data.image_base64}`);
+
+            // Successful API call:
+            setActivePanelId(panelId);  // <-- Ensure this line exists
 
         } catch (error) {
             console.error("Generation failed:", error);
@@ -260,6 +265,8 @@ function User_prompt({ originalPrompt = "", refinedPrompt = "", panelId = 0, mod
                 <div className='generate-img-div'>
                     <button
                         onClick={generateImage}
+                        // pass setActivePanelId into generateImage to know which image which button should generate
+                        // onClick={() => generateImage(setActivePanelId)}
                         disabled={isGenerating || !refinedPrompt.trim()}
                     >
                         {isGenerating ? 'Generating...' : 'Generate Image'}
