@@ -3,6 +3,7 @@ import './App.css'
 import User_prompt from './components/module_1';
 import Panel from './components/module_2';
 import NumberDropdown from './components/module_3';
+import ResizablePanel from './components/module_4';
 
 function App() {
   // list of dictionaries
@@ -157,10 +158,13 @@ function App() {
                             module?.visible && module?.image &&
                             <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
                               {/* <h3 style={{ color: 'black' }} className="panel-header">{panelLabel} </h3> */}
-                              < Panel
+                              <ResizablePanel
+                                image={modules.find(m => m.panelId === panelId)?.image}
+                              />
+                              {/* < Panel
                                 modules={modules}
                                 activePanelId={panelId}
-                              />
+                              /> */}
                               {/* <h3 style={{ color: 'black' }}>
                                 {panelId}
                               </h3> */}
