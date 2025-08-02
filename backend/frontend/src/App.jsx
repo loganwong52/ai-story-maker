@@ -158,13 +158,13 @@ function App() {
                             module?.visible && module?.image &&
                             <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
                               {/* <h3 style={{ color: 'black' }} className="panel-header">{panelLabel} </h3> */}
-                              <ResizablePanel
+                              {/* <ResizablePanel
                                 image={modules.find(m => m.panelId === panelId)?.image}
-                              />
-                              {/* < Panel
+                              /> */}
+                              < Panel
                                 modules={modules}
                                 activePanelId={panelId}
-                              /> */}
+                              />
                               {/* <h3 style={{ color: 'black' }}>
                                 {panelId}
                               </h3> */}

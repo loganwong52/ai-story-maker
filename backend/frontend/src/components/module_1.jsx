@@ -128,6 +128,9 @@
 // export default User_prompt;
 
 import { useState } from 'react';
+// import { supabase } from './lib/supabaseClient'
+// import { supabase } from '../lib/supabaseClient';
+
 // setOriginalPrompt, setRefinedPrompt, setImage
 function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }) {
     const module = modules.find((m) => m.panelId === panelId);
@@ -216,22 +219,82 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt: refinedPrompt })
             });
-            let data;
-            try {
-                data = await response.json();
-            } catch {
-                throw new Error("Server returned invalid JSON");
-            }
 
-            if (!response.ok) {
-                throw new Error(data.error || "Image generation failed");
-            }
+            const { image_url } = await response.json();
+            updateModule('image', image_url); // This URL won't expire
 
+            // let data;
+            // try {
+            //     data = await response.json();
+            // } catch {
+            //     throw new Error("Server returned invalid JSON");
+            // }
+
+            // if (!response.ok) {
+            //     throw new Error(data.error || "Image generation failed");
+            // }
+
+            // // 2. Upload to Supabase
+            // console.log("Supabase instance:", supabase)
+            // // Get the URL
+            // const imageUrl = data.image_url;
+            // console.log("Generate Image URL:", imageUrl)
+            // // Make an HTTP request to the URL
+            // const imageResponse = await fetch(imageUrl);
+            // // Convert response to a binary large object
+            // const blob = await imageResponse.blob();
+
+            // const blob = await response.blob();
+
+
+            // // Get a reference to the Supabase storage bucket
+            // const storageBucket = supabase.storage.from('ai-story-maker');
+            // // Generate a unique filename (timestamp + .jpg)
+            // const fileName = `generated/${Date.now()}.jpg`;
+            // // Upload the blob to Supabase Storage
+            // const uploadResult = await storageBucket.upload(fileName, blob);
+            // // Destructure the result into `data` (renamed to supabaseData) and `error`
+            // const { data: supabaseData, error } = uploadResult;
+            // if (error) throw error;
+
+
+            // // Upload to Supabase
+            // const fileName = `generated/${Date.now()}.jpg`;
+
+            // // Get a reference to the storage bucket
+            // const imageBucket = supabase.storage.from('ai-story-maker');
+            // // Define the upload options
+            // const uploadOptions = {
+            //     contentType: 'image/jpeg',  // Explicitly set the MIME type
+            //     upsert: false              // Don't overwrite if file exists
+            // };
+            // // Execute the upload
+            // const { error } = await imageBucket.upload(fileName, blob, uploadOptions);
+            // // Handle errors
+            // if (error) {
+            //     console.error('Upload failed:', error);
+            //     throw new Error(`Image upload failed: ${error.message}`);
+            // }
+
+
+            // // Get permanent URL
+            // // Get the storage bucket reference (unique variable name)
+            // const aiStoryMakerBucket = supabase.storage.from('ai-story-maker');
+            // // Generate the public URL (store response in a separate variable)
+            // const publicUrlResult = aiStoryMakerBucket.getPublicUrl(supabaseData.path);
+            // // Destructure the nested `publicUrl` from the response
+            // const publicUrl = publicUrlResult.data.publicUrl;
+
+            // // Get permanent URL
+            // const { data: { publicUrl } } = supabase.storage
+            //     .from('ai-story-maker')
+            //     .getPublicUrl(fileName);
 
             // Success
             // Add image to dictionary in list
             // updateModule('image', `data:image/jpeg;base64,${data.image_base64}`);
-            updateModule('image', data.image_url);
+            // updateModule('image', publicUrl);
+
             // set boolean in the dictionary in the list
             updateModule('visible', true);
 

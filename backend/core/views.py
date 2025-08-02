@@ -1,7 +1,9 @@
 import os
+import uuid
 import requests
 import base64
 from django.http import JsonResponse
+from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from langchain_community.llms import Ollama
 from langchain_community.vectorstores import Chroma
@@ -12,6 +14,10 @@ from PyPDF2 import PdfReader
 from docx import Document
 
 import replicate
+from supabase import create_client
+
+# import { createClient } from '@supabase/supabase-js'
+
 import traceback
 
 from dotenv import load_dotenv
@@ -115,42 +121,6 @@ def refine_prompt(request):
 #         return JsonResponse({"error": str(e), "trace": traceback_str}, status=500)
 
 
-@api_view(["POST"])  # this endpoint only accepts POST requests
-def generate_image(request):
-    try:
-        api_token = os.getenv("REPLICATE_KEY")
-        if not api_token:
-            return JsonResponse(
-                {"error": "Missing REPLICATE_API_TOKEN environment variable"},
-                status=400,
-            )
-
-        client = replicate.Client(api_token=api_token)
-
-        prompt = request.data.get("prompt", "")
-        if not prompt:
-            return JsonResponse({"error": "No prompt provided"}, status=400)
-
-        output = client.run("black-forest-labs/flux-schnell", input={"prompt": prompt})
-        # print(type(output))
-        # print(f"OUTPUT: {output}")
-        # image_url = output[0].url()
-        image_url = output[0]
-        if hasattr(image_url, "__str__"):
-            image_url = str(image_url)
-        else:
-            image_url = None
-
-        return JsonResponse({"status": "success", "image_url": image_url})
-
-    except Exception as e:
-        # Print full traceback to console for debugging
-        traceback.print_exc()
-
-        # Return error message as JSON response so frontend can read it
-        return JsonResponse({"error": str(e)}, status=500)
-
-
 @csrf_exempt
 def extract_text(request):
     if request.method == "POST" and request.FILES.get("file"):
@@ -179,3 +149,105 @@ def extract_text(request):
             default_storage.delete(filename)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+# @api_view(["POST"])  # this endpoint only accepts POST requests
+# def generate_image(request):
+#     try:
+#         api_token = os.getenv("REPLICATE_KEY")
+#         client = replicate.Client(api_token=api_token)
+
+#         prompt = request.data.get("prompt", "")
+#         output = client.run("black-forest-labs/flux-schnell", input={"prompt": prompt})
+#         # print(type(output))
+#         # print(f"OUTPUT: {output}")
+
+#         # image_url = output[0].url()
+#         image_url = output[0]
+#         # if hasattr(image_url, "__str__"):
+#         #     image_url = str(image_url)
+#         # else:
+#         #     image_url = None
+#         response = requests.get(image_url)
+#         response.raise_for_status()
+
+#         # return JsonResponse({"status": "success", "image_url": image_url})
+#         return HttpResponse(response.content, content_type="image/webp")
+
+#     except Exception as e:
+#         # Print full traceback to console for debugging
+#         traceback.print_exc()
+
+#         # Return error message as JSON response so frontend can read it
+#         return JsonResponse({"error": str(e)}, status=500)
+
+
+# @api_view(["POST"])
+# def generate_image(request):
+#     model_name = "black-forest-labs/flux-schnell"
+#     try:
+#         # 1. Generate image
+#         client = replicate.Client(api_token=os.getenv("REPLICATE_KEY"))
+#         output = client.run(model_name, input={"prompt": request.data["prompt"]})
+
+#         # 2. Download and upload to Supabase
+#         image_url = output[0]
+#         img_data = requests.get(image_url).content
+
+#         supabase = create_client(
+#             os.getenv("SUPABASE_URL"),
+#             os.getenv("SUPABASE_SECRET_KEY"),  # From Supabase settings -> API
+#         )
+
+#         file_name = f"images/{uuid.uuid4()}.jpg"
+#         supabase.storage.from_("ai-story-maker").upload(
+#             file_name, img_data, content_type="image/jpeg"
+#         )
+
+#         # 3. Return permanent URL
+#         permanent_url = f"{os.getenv('SUPABASE_URL')}/storage/v1/object/public/ai-story-maker/{file_name}"
+#         return JsonResponse({"image_url": permanent_url})
+
+#     except Exception as e:
+#         return JsonResponse({"error": str(e)}, status=500)
+
+
+@api_view(["POST"])
+def generate_image(request):
+    """Returns a temporary URL from Replicate."""
+    model_name = "black-forest-labs/flux-schnell"
+    api_token = os.getenv("REPLICATE_KEY")
+    refined_prompt = request.data["prompt"]
+
+    try:
+        # Call Replicate API
+        client = replicate.Client(api_token)
+        output = client.run(model_name, input={"prompt": refined_prompt})
+        temporary_img_url = str(output[0])
+        return JsonResponse({"image_url": temporary_img_url})
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@api_view(["POST"])
+def upload_image(request):
+    """Uploads an image URL (from Replicate) to Supabase."""
+    try:
+        image_url = request.data["image_url"]  # From Step 1
+        img_data = requests.get(image_url, stream=True).content
+
+        supabase = create_client(
+            os.getenv("SUPABASE_URL"),
+            os.getenv("SUPABASE_SECRET_KEY"),
+        )
+
+        file_name = f"images/{uuid.uuid4()}.jpg"
+        supabase.storage.from_("ai-story-maker").upload(
+            file_name, img_data, content_type="image/jpeg"
+        )
+
+        permanent_url = f"{os.getenv('SUPABASE_URL')}/storage/v1/object/public/ai-story-maker/{file_name}"
+        return JsonResponse({"image_url": permanent_url})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
