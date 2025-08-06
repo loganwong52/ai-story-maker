@@ -234,20 +234,28 @@ def generate_image(request):
 def upload_image(request):
     """Uploads an image URL (from Replicate) to Supabase."""
     try:
-        image_url = request.data["image_url"]  # From Step 1
-        img_data = requests.get(image_url, stream=True).content
+        image_url = request.data["image_url"]
+
+        # Get the image
+        response = requests.get(image_url, stream=True)
+        response.raise_for_status()
+        img_data = response.content
 
         supabase = create_client(
             os.getenv("SUPABASE_URL"),
             os.getenv("SUPABASE_SECRET_KEY"),
         )
 
-        file_name = f"images/{uuid.uuid4()}.jpg"
+        file_name = f"images/{uuid.uuid4()}.webp"
+
         supabase.storage.from_("ai-story-maker").upload(
-            file_name, img_data, content_type="image/jpeg"
+            path=file_name,
+            file=img_data,
+            file_options={"content-type": "image/webp"},
         )
 
         permanent_url = f"{os.getenv('SUPABASE_URL')}/storage/v1/object/public/ai-story-maker/{file_name}"
         return JsonResponse({"image_url": permanent_url})
+
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)

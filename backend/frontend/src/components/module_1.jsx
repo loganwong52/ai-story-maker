@@ -214,14 +214,29 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
 
         setIsGenerating(true);
         try {
-            const response = await fetch('/api/generate-image/', {
+
+            // Generate image temporary URL
+            const generateResponse = await fetch('/api/generate-image/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ prompt: refinedPrompt })
             });
+            const generate_data = await generateResponse.json();
+            const image_url = generate_data.image_url;
+            console.log("image_url:", image_url)
 
-            const { image_url } = await response.json();
-            updateModule('image', image_url); // This URL won't expire
+            // Turn temp URL to permanent URL
+            const uploadResponse = await fetch('/api/upload-image/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image_url: image_url }) // Your temp URL
+            });
+            const upload_data = await uploadResponse.json();
+            const permanent_url = upload_data.image_url;
+            console.log("Permanent URL:", permanent_url);
+
+            updateModule('image', permanent_url);
+
 
             // let data;
             // try {
