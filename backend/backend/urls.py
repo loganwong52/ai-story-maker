@@ -15,6 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+# This file is for storing API Endpoints (GET and POST request)
+# This file is NOT for the frontend page URLs
 from django.urls import path
 from core.views import (
     refine_prompt,
