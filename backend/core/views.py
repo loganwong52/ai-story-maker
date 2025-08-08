@@ -5,21 +5,16 @@ import base64
 from django.http import JsonResponse
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
-from langchain_community.llms import Ollama
-from langchain_community.vectorstores import Chroma
 
+# from langchain_community.llms import Ollama
+# from langchain_community.vectorstores import Chroma
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from PyPDF2 import PdfReader
 from docx import Document
-
 import replicate
 from supabase import create_client
-
-# import { createClient } from '@supabase/supabase-js'
-
 import traceback
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -27,7 +22,8 @@ load_dotenv()
 
 # # Sets up a DRF (Django REST Framework) view that accepts POST requests.
 # # Returns a mock response (Ollama/ChromaDB logic will be here)
-@api_view(["POST"])  # this endpoint only accepts POST requests
+# this endpoint only accepts POST requests
+@api_view(["POST"])
 def refine_prompt(request):
     try:
         # 1. Get user prompt
@@ -68,25 +64,20 @@ def refine_prompt(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
-# @api_view(["POST"])  # this endpoint only accepts POST requests
 # def generate_image(request):
 #     try:
 #         # 3. (Next we'll add RAG and image generation)
 #         # vector_db = Chroma(persist_directory="./chroma_data")  # Local vector store
-
 #         # 4. Send the refined prompt to a model to GENERATE AN IMAGE
 #         api_key = os.getenv("REPLICATE_KEY")
 #         client = replicate.Client(api_token=f"{api_key}")
-
 #         link = "black-forest-labs/flux-schnell:latest"
 #         refined_prompt = request.data.get("prompt", "")
-
 #         output = client.run(
 #             link,
 #             input={"prompt": refined_prompt},
 #         )
 #         print(output)  # This will be a URL or list of URLs to images
-
 #         #     link = "https://api.deepai.org/api/text2img"
 #         #     response = requests.post(
 #         #         link,
@@ -96,16 +87,13 @@ def refine_prompt(request):
 #         #     response.raise_for_status()
 #         # Get the image URL
 #         # image_url = response.json()["output_url"]
-
 #         image_url = output
 #         if isinstance(output, list):
 #             image_url = output[0]
 #         image_response = requests.get(image_url)
 #         image_response.raise_for_status()
-
 #         # Get the image & turn it into text format
 #         encoded_image = base64.b64encode(image_response.content).decode("utf-8")
-
 #         return JsonResponse(
 #             {
 #                 "status": "success",
@@ -113,7 +101,6 @@ def refine_prompt(request):
 #                 "image_base64": encoded_image,  # encoded image data
 #             }
 #         )
-
 #     except Exception as e:
 #         traceback_str = traceback.format_exc()
 #         traceback.print_exc()
@@ -151,67 +138,6 @@ def extract_text(request):
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
-# @api_view(["POST"])  # this endpoint only accepts POST requests
-# def generate_image(request):
-#     try:
-#         api_token = os.getenv("REPLICATE_KEY")
-#         client = replicate.Client(api_token=api_token)
-
-#         prompt = request.data.get("prompt", "")
-#         output = client.run("black-forest-labs/flux-schnell", input={"prompt": prompt})
-#         # print(type(output))
-#         # print(f"OUTPUT: {output}")
-
-#         # image_url = output[0].url()
-#         image_url = output[0]
-#         # if hasattr(image_url, "__str__"):
-#         #     image_url = str(image_url)
-#         # else:
-#         #     image_url = None
-#         response = requests.get(image_url)
-#         response.raise_for_status()
-
-#         # return JsonResponse({"status": "success", "image_url": image_url})
-#         return HttpResponse(response.content, content_type="image/webp")
-
-#     except Exception as e:
-#         # Print full traceback to console for debugging
-#         traceback.print_exc()
-
-#         # Return error message as JSON response so frontend can read it
-#         return JsonResponse({"error": str(e)}, status=500)
-
-
-# @api_view(["POST"])
-# def generate_image(request):
-#     model_name = "black-forest-labs/flux-schnell"
-#     try:
-#         # 1. Generate image
-#         client = replicate.Client(api_token=os.getenv("REPLICATE_KEY"))
-#         output = client.run(model_name, input={"prompt": request.data["prompt"]})
-
-#         # 2. Download and upload to Supabase
-#         image_url = output[0]
-#         img_data = requests.get(image_url).content
-
-#         supabase = create_client(
-#             os.getenv("SUPABASE_URL"),
-#             os.getenv("SUPABASE_SECRET_KEY"),  # From Supabase settings -> API
-#         )
-
-#         file_name = f"images/{uuid.uuid4()}.jpg"
-#         supabase.storage.from_("ai-story-maker").upload(
-#             file_name, img_data, content_type="image/jpeg"
-#         )
-
-#         # 3. Return permanent URL
-#         permanent_url = f"{os.getenv('SUPABASE_URL')}/storage/v1/object/public/ai-story-maker/{file_name}"
-#         return JsonResponse({"image_url": permanent_url})
-
-#     except Exception as e:
-#         return JsonResponse({"error": str(e)}, status=500)
-
-
 @api_view(["POST"])
 def generate_image(request):
     """Returns a temporary URL from Replicate."""
@@ -220,7 +146,7 @@ def generate_image(request):
     refined_prompt = request.data["prompt"]
 
     try:
-        # Call Replicate API
+        # Call Replicate API to generate image
         client = replicate.Client(api_token)
         output = client.run(model_name, input={"prompt": refined_prompt})
         temporary_img_url = str(output[0])
