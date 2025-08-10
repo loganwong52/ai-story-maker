@@ -59,7 +59,6 @@ img {
   /* Ensure it doesn't overflow horizontally */
   padding: 20px;
   box-sizing: border-box;
-
 }
 
 .left-column {
@@ -70,7 +69,10 @@ img {
 
 .right-column {
   flex: 1;
-  padding: 20px;
+  /* padding: 20px; */
+  height: 100vh;
+  width: 100vw;
+  position: relative;
 }
 
 /* vertical divider line between the sections */
@@ -87,7 +89,6 @@ img {
 .input-section {
   display: grid;
   gap: 20px;
-
 }
 
 .input-section h5 {
@@ -195,17 +196,14 @@ img {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  position: relative;
 }
 
 .safe-area img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  /*so alt text is black */
-  color: black;
-  text-align: center;
+  object-fit: cover;
+  width: 300px;
+  height: auto;
 }
-
 
 /* Panel */
 .panel-image {
@@ -213,31 +211,6 @@ img {
   max-height: 100%;
   display: block;
   object-fit: contain;
-  /* This ensures the image maintains aspect ratio */
-}
-
-/* Ensures the Panel container fills its parent */
-/* .panel-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-} */
-
-/* .panel-container {
-  position: relative;
-  max-width: calc(100vw - env(safe-area-inset-left) - env(safe-area-inset-right));
-  max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-  overflow: hidden;
-} */
-
-.safe-area img {
-  object-fit: cover;
-
-  /* width: 200px; */
-  /* height: 200px; */
-  width: 300px;
-  height: auto;
 }
 
 /* Grid cell container (enforces equal sizing) */
@@ -287,7 +260,7 @@ img {
 
 /* Resizable */
 /* Add to your stylesheet */
-.panel-container {
+/* .panel-container {
   position: relative;
   width: 100%;
   height: 100%;
@@ -301,4 +274,17 @@ img {
   right: 0;
   bottom: 0;
   cursor: se-resize;
+} */
+
+
+/* Ensure the resizable container fills its parent */
+.resizable-container {
+  display: flex;
+  height: 100%;
+}
+
+/* Style for the content panels */
+.panel {
+  overflow: auto;
+  padding: 15px;
 }
