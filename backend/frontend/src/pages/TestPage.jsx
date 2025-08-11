@@ -84,6 +84,70 @@ function TestPage() {
 
     return (
         <div className="app-container">
+            {/* Left section w/ User Prompts */}
+            <div className="left-column">
+                {/* Dropdowns to choose Row # and Col #s */}
+                <NumberDropdown
+                    selectedNumber={numOfRows}
+                    setSelectedNumber={setNumOfRows}
+                    label_text={"Number of rows:"}
+                />
+
+                {/* Dynamic dropdowns - map is used, not a for loop */}
+                {Array.from({ length: numOfRows }).map((_, index) => (
+                    <NumberDropdown
+                        key={index}
+                        selectedNumber={columnCounts[index]}
+                        setSelectedNumber={(numOfCols) => {
+                            // 1. create a copy of the old array
+                            const newCounts = [...columnCounts];
+                            // 2. update the copy
+                            newCounts[index] = numOfCols;
+                            // 3. Replace the entire old array with the new updated version
+                            setColumnCounts(newCounts);
+                        }}
+                        label_text={`Row ${index + 1}; Number of Columns:`}
+                    />
+                ))}
+
+
+                {/* LEFT GRID */}
+                <div className="grid">
+                    {columnCounts.map((colsInRow, rowIndex) => (
+                        <div key={`row-${rowIndex}`} className="grid-row">
+                            {Array.from({ length: colsInRow }).map((_, colIndex) => {
+                                // Extract the Panel label given the row and col indices
+                                const panelLabel = panelLabels[rowIndex][colIndex]
+
+                                // Create the "key"
+                                const panelId = `row-${rowIndex + 1}-col-${colIndex + 1}`;
+                                // Find module by ID; .find searches array, finds 1st module whose panelID is panelId
+                                // module is a dict, since modules is a list of dicts
+                                const module = modules.find((m) => m.panelId === panelId);
+
+                                return (
+                                    <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
+                                        <h3 className="panel-header">{panelLabel}</h3>
+
+                                        <div key={`cell-${rowIndex}, ${colIndex}`} className="grid-cell">
+                                            <User_prompt
+                                                panelId={panelId}
+                                                modules={modules}
+                                                setModules={setModules}
+                                                setActivePanelId={setActivePanelId}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))}
+                </div>
+
+                {/* End of Left column */}
+            </div>
+
+
 
             <div className='right-column'>
                 <div className="result-section">
@@ -94,7 +158,9 @@ function TestPage() {
                         <div className="safe-area" ref={rightColumnRef}>
 
                             {/* Where the image actually appears */}
-                            <ResizableComponents />
+                            <div className='right-column' ref={rightColumnRef}>
+                                <ResizableComponents />
+                            </div>
 
 
                         </div>

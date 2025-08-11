@@ -1,67 +1,67 @@
-/* .resizable-wrapper {
+.resizable-container {
     display: flex;
-    height: 100%;
-} */
-.resizable-wrapper {
-    display: flex;
-    /* height: 100vh; */
-    height: 100%;
-    width: 100vw;
-    max-width: 100%;
-
-    /* position: relative; */
-    /* or 'absolute' if in a positioned container */
-    /* top: 0; */
-    /* left: 0; */
-    min-width: min-content;
-    /* Allows natural shrinking */
-
+    flex-direction: column;
+    height: 100vh;
 }
 
-/* .left-block {
-    background: red;
+.left-panel {
     border: 2px solid black;
-    overflow: auto;
-    min-width: 100px;
-    max-width: 800px;
-} */
-.left-block {
     background: red;
-    border: 2px solid black;
-    overflow: auto;
-    min-width: 100px;
-    max-width: 800px;
-    box-sizing: border-box;
     overflow: auto;
 }
 
+.right-panel {
+    flex: 1;
+    border: 2px solid black;
+    background: blue;
+    overflow: auto;
+}
 
-.separator {
-    width: 10px;
+/* Vertical separator (between left & right columns) */
+.vertical-separator {
+    width: 8px;
+    height: 100%;
     background: white;
     cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    flex-shrink: 0;
+    /* transform: translateX(-100%); */
+}
+
+.vertical-separator:hover {
+    background: lightgrey;
+}
+
+/* Horizontal separator (between rows) */
+.horizontal-separator {
+    height: 8px;
+    background: white;
+    cursor: row-resize;
     user-select: none;
     touch-action: none;
     position: relative;
     z-index: 1;
     flex-shrink: 0;
-
-}
-
-.right-block {
-    flex: 1;
-    background: blue;
-    border: 2px solid black;
-    padding: 10px;
-    overflow: auto;
-    min-width: 200px;
-
-}
-
-/* Add to ResizableComponents.css */
-.debug-border {
-    border: 10px solid green !important;
-    overflow: hidden;
     width: 100%;
-    height: 100%;
+}
+
+.horizontal-separator:hover {
+    background: lightgrey;
+}
+
+.row {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+
+.left-panel,
+.right-panel {
+    box-sizing: border-box;
 }
