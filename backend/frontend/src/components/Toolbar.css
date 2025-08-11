@@ -1,0 +1,56 @@
+/* Makes the entire toolbar horizontal */
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+/* Ensures each section stays inline */
+.toolbar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Arrow button grid layout - keeps your ↑←→↓ arrangement */
+.arrow-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.arrow-row {
+    display: flex;
+    gap: 4px;
+}
+
+/* Optional: Consistent button sizing */
+.arrow-button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}
+
+
+
+
+
+/* Position each arrow in the grid */
+
+
+
+/* Zoom buttons side-by-side */
+.zoom-controls {
+    display: flex;
+    gap: 4px;
+}
+
+/* Checkbox alignment */
+.toolbar-section input[type="checkbox"] {
+    margin-right: 4px;
+}
