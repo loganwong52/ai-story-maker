@@ -8,7 +8,12 @@ const Toolbar = ({
     hasBorder,
     onBorderToggle,
 }) => {
-    // const [selectedNumber, setSelectedNumber] = useState(1);
+
+    const panel_options = [];
+    for (let i = 1; i <= totalPanels; i++) {
+        let panel_option = <option key={i} value={i}>{i}</option>
+        panel_options.push(panel_option);
+    }
 
     return (
         <div className="toolbar">
@@ -17,18 +22,13 @@ const Toolbar = ({
                 <label>Panel:</label>
                 <select
                     value={selectedPanelNumber}
-                    // onChange={(e) => {
-                    //     const num = Number(e.target.value);
-                    //     console.log("Selected panel number:", num)
-                    //     setSelectedNumber(num);
-                    //     onPanelSelect(num);
-                    // }}
-                    onChange={(e) => onPanelSelect(Number(e.target.value))}
-
+                    onChange={(e) => {
+                        const num = Number(e.target.value);
+                        console.log("Selected panel number:", num)
+                        onPanelSelect(num)
+                    }}
                 >
-                    {Array.from({ length: totalPanels }, (_, i) => (
-                        <option key={i + 1} value={i + 1}>{i + 1}</option>
-                    ))}
+                    {panel_options}
                 </select>
             </div>
 

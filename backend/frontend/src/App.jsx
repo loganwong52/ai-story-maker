@@ -138,12 +138,12 @@ function App() {
 
   // STUFF FOR TOOLBAR
   const totalPanels = panelLabels.flat().length;
-  console.log("Total Panels:", totalPanels)
+  // console.log("Total Panels:", totalPanels)
 
   // Global state for Toolbar's Panel Selector Dropdown
   const [selectedPanelId, setSelectedPanelId] = useState("row-1-col-1");
 
-  // Toolbar handlers
+  // Toolbar Panel Select Dropdown
   const handlePanelSelect = (panelNumber) => {
     const newPanelId = getPanelIdFromNumber(panelNumber);
     setSelectedPanelId(newPanelId);
@@ -153,13 +153,15 @@ function App() {
   const [panelBorders, setPanelBorders] = useState(() => {
     const borders = {};
     modules.forEach(module => {
-      borders[module.panelId] = true; // Default to bordered
+      borders[module.panelId] = true;
     });
     return borders;
   });
 
   // Toolbar's checkbox
   const handleBorderToggle = (isChecked) => {
+    // Shallow copy the past stuff
+    // And update the key-value pair of selectedPanelId & isChecked
     setPanelBorders(prev => ({
       ...prev,
       [selectedPanelId]: isChecked
@@ -273,7 +275,6 @@ function App() {
                           return (
                             module?.visible && module?.image &&
                             <div key={`cell-${rowIndex}, ${colIndex}`} className="cell-container">
-                              {/* <h3 style={{ color: 'black' }} className="panel-header">{panelLabel} </h3> */}
                               {/* <ResizablePanel
                                 image={modules.find(m => m.panelId === panelId)?.image}
                               /> */}
@@ -281,17 +282,7 @@ function App() {
                                 modules={modules}
                                 activePanelId={panelId}
                                 hasBorder={panelBorders[panelId] ?? true}
-
                               />
-                              {/* <h3 style={{ color: 'black' }}>
-                                {panelId}
-                              </h3> */}
-                              {/* <h3 style={{ color: 'black' }}>
-                                {modules.find(m => m.panelId === activePanelId).originalPrompt}
-                              </h3> */}
-                              {/* <h6 style={{ color: 'black' }}>
-                                {modules.find(m => m.panelId === activePanelId).refinedPrompt}
-                              </h6> */}
 
                             </div>
                           );

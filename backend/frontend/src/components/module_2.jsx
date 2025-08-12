@@ -1,21 +1,11 @@
-import { useState } from 'react';
-
-// function Panel(image, refinedPrompt) {
 function Panel({ modules, activePanelId, hasBorder }) {
-    // console.log(typeof modules)
-    // console.log(modules)
-    // console.log(activePanelId)
-
+    /* 
+    modules: dictionary 
+    activePanelId: int; the panel number of the most recent generated image
+    hasBorder: boolean
+    */
     const panel_image = modules.find(m => m.panelId === activePanelId).image
     const refinedPrompt = modules.find(m => m.panelId === activePanelId).refinedPrompt
-
-    // const [hasBorder, setHasBorder] = useState(true);
-
-    // const toggleBorder = () => {
-    //     setHasBorder(!hasBorder);
-    // };
-
-    // console.log(refinedPrompt)
 
     return (
         <div className="panel-image-container">
@@ -27,15 +17,6 @@ function Panel({ modules, activePanelId, hasBorder }) {
                 }}
                 className='panel-image'
             />
-
-            {/* <label style={{ color: 'black' }}>
-                <input
-                    type="checkbox"
-                    checked={hasBorder}
-                    onChange={toggleBorder}
-                />
-                Border on/off
-            </label> */}
         </div>
 
     );
