@@ -42,6 +42,7 @@ function updatePanelLayout(columnCounts) {
   return panelLayout;
 }
 
+
 function App() {
   // list of dictionaries
   // Init with all modules
@@ -91,9 +92,57 @@ function App() {
   }, [modules]);
 
 
+  // Nested function, only to be used inside App()
+  const getPanelIdFromNumber = (targetNumber) => {
+    /* Converts an int into row-?-col-? */
+
+    let count = 0;
+    for (let row = 0; row < panelLabels.length; row++) {
+      for (let col = 0; col < panelLabels[row].length; col++) {
+        count++;
+        if (count === targetNumber) {
+          return `row-${row + 1}-col-${col + 1}`;
+        }
+      }
+    }
+    return activePanelId;
+  };
+
+  // Nested function, only to be used inside App()
+  const getPanelNumberFromId = (panelId) => {
+    /* Converts "row-x-col-y" into an int */
+
+    // Convert panelID to list: [row, x, col, y]
+    const panelId_chunks = panelId.split('-');
+
+    // Cast all elements in panelId_chunks to be Numbers: [NaN, x, NaN, y]
+    const numeric_panelId_chunks = panelId_chunks.map(Number);
+
+    // Extract only x and y
+    const row = Number(numeric_panelId_chunks[1]);
+    const col = Number(numeric_panelId_chunks[3]);
+
+    // Sum panels in all rows above
+    let number = 0;
+    for (let r = 1; r < row; r++) {
+      row_of_panels = panelLabels[r - 1]
+      row_len = row_of_panels.length
+      number += row_len;
+    }
+    panel_position = number + col
+
+    return panel_position;
+  };
+
+
 
   const totalPanels = panelLabels.flat().length;
   console.log("Total Panels:", totalPanels)
+
+  const handlePanelSelect = (panelNumber) => {
+    const newPanelId = getPanelIdFromNumber(panelNumber);
+    setActivePanelId(newPanelId);
+  };
 
   return (
     <div className="app-container">
@@ -167,6 +216,7 @@ function App() {
 
           <Toolbar
             totalPanels={totalPanels}
+            onPanelSelect={handlePanelSelect}
           />
           <br />
 

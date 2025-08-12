@@ -17,30 +17,31 @@
 }
 
 /* Arrow button grid layout - keeps your ↑←→↓ arrangement */
+/* Main container - stacks vertically */
 .arrow-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 4px;
 }
 
+/* Middle row with left/right arrows */
 .arrow-row {
     display: flex;
     gap: 4px;
 }
 
-/* Optional: Consistent button sizing */
+/* Consistent button styling */
 .arrow-button {
     width: 30px;
     height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 0;
+    font-size: 20px;
+
 }
-
-
-
-
-
-/* Position each arrow in the grid */
 
 
 
@@ -48,6 +49,7 @@
 .zoom-controls {
     display: flex;
     gap: 4px;
+    font-size: 20px;
 }
 
 /* Checkbox alignment */

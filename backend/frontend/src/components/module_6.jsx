@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import './Toolbar.css';
 
-const Toolbar = ({ totalPanels = 1 }) => {
+const Toolbar = ({ totalPanels, onPanelSelect }) => {
     const [selectedNumber, setSelectedNumber] = useState(1);
 
     return (
         <div className="toolbar">
             {/* Panel number selector dropdown */}
             <div className="toolbar-section">
-                <div>
-                    <label>Select<br />Panel:</label>
-                </div>
+                <label>Panel:</label>
                 <select
                     value={selectedNumber}
-                    onChange={(e) => setSelectedNumber(Number(e.target.value))}
+                    onChange={(e) => {
+                        const num = Number(e.target.value);
+                        console.log("Selected panel number:", num)
+                        setSelectedNumber(num);
+                        onPanelSelect(num);
+                    }}
                 >
                     {Array.from({ length: totalPanels }, (_, i) => (
                         <option key={i + 1} value={i + 1}>{i + 1}</option>
@@ -26,11 +29,9 @@ const Toolbar = ({ totalPanels = 1 }) => {
                 <label>Position:</label>
                 <div className="arrow-buttons">
                     <button className="arrow-button">↑</button>
-                    <div className="arrow-row">
-                        <button className="arrow-button" >←</button>
-                        <button className="arrow-button" >→</button>
-                    </div>
                     <button className="arrow-button" >↓</button>
+                    <button className="arrow-button" >←</button>
+                    <button className="arrow-button" >→</button>
                 </div>
             </div>
 
@@ -48,7 +49,8 @@ const Toolbar = ({ totalPanels = 1 }) => {
                 <label>
                     Border?
                     <br />
-                    <input type="checkbox" />
+                    <input type="checkbox" checked={true}
+                    />
                 </label>
             </div>
 
