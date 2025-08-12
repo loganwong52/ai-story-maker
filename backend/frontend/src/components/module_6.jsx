@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import './Toolbar.css';
 
-const Toolbar = ({ totalPanels, onPanelSelect }) => {
-    const [selectedNumber, setSelectedNumber] = useState(1);
+const Toolbar = ({
+    totalPanels,
+    selectedPanelNumber,
+    onPanelSelect,
+    hasBorder,
+    onBorderToggle,
+}) => {
+    // const [selectedNumber, setSelectedNumber] = useState(1);
 
     return (
         <div className="toolbar">
@@ -10,13 +16,15 @@ const Toolbar = ({ totalPanels, onPanelSelect }) => {
             <div className="toolbar-section">
                 <label>Panel:</label>
                 <select
-                    value={selectedNumber}
-                    onChange={(e) => {
-                        const num = Number(e.target.value);
-                        console.log("Selected panel number:", num)
-                        setSelectedNumber(num);
-                        onPanelSelect(num);
-                    }}
+                    value={selectedPanelNumber}
+                    // onChange={(e) => {
+                    //     const num = Number(e.target.value);
+                    //     console.log("Selected panel number:", num)
+                    //     setSelectedNumber(num);
+                    //     onPanelSelect(num);
+                    // }}
+                    onChange={(e) => onPanelSelect(Number(e.target.value))}
+
                 >
                     {Array.from({ length: totalPanels }, (_, i) => (
                         <option key={i + 1} value={i + 1}>{i + 1}</option>
@@ -49,7 +57,10 @@ const Toolbar = ({ totalPanels, onPanelSelect }) => {
                 <label>
                     Border?
                     <br />
-                    <input type="checkbox" checked={true}
+                    <input
+                        type="checkbox"
+                        checked={hasBorder}
+                        onChange={(e) => onBorderToggle(e.target.checked)}
                     />
                 </label>
             </div>

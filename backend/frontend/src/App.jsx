@@ -125,23 +125,45 @@ function App() {
     // Sum panels in all rows above
     let number = 0;
     for (let r = 1; r < row; r++) {
-      row_of_panels = panelLabels[r - 1]
-      row_len = row_of_panels.length
+      let row_of_panels = panelLabels[r - 1]
+      let row_len = row_of_panels.length
       number += row_len;
     }
-    panel_position = number + col
+    let panel_position = number + col
 
     return panel_position;
   };
 
 
 
+  // STUFF FOR TOOLBAR
   const totalPanels = panelLabels.flat().length;
   console.log("Total Panels:", totalPanels)
 
+  // Global state for Toolbar's Panel Selector Dropdown
+  const [selectedPanelId, setSelectedPanelId] = useState("row-1-col-1");
+
+  // Toolbar handlers
   const handlePanelSelect = (panelNumber) => {
     const newPanelId = getPanelIdFromNumber(panelNumber);
-    setActivePanelId(newPanelId);
+    setSelectedPanelId(newPanelId);
+  };
+
+  // Panel borders
+  const [panelBorders, setPanelBorders] = useState(() => {
+    const borders = {};
+    modules.forEach(module => {
+      borders[module.panelId] = true; // Default to bordered
+    });
+    return borders;
+  });
+
+  // Toolbar's checkbox
+  const handleBorderToggle = (isChecked) => {
+    setPanelBorders(prev => ({
+      ...prev,
+      [selectedPanelId]: isChecked
+    }));
   };
 
   return (
@@ -216,7 +238,10 @@ function App() {
 
           <Toolbar
             totalPanels={totalPanels}
+            selectedPanelNumber={getPanelNumberFromId(selectedPanelId)}
             onPanelSelect={handlePanelSelect}
+            hasBorder={panelBorders[selectedPanelId] ?? true}
+            onBorderToggle={handleBorderToggle}
           />
           <br />
 
@@ -255,6 +280,8 @@ function App() {
                               < Panel
                                 modules={modules}
                                 activePanelId={panelId}
+                                hasBorder={panelBorders[panelId] ?? true}
+
                               />
                               {/* <h3 style={{ color: 'black' }}>
                                 {panelId}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // function Panel(image, refinedPrompt) {
-function Panel({ modules, activePanelId }) {
+function Panel({ modules, activePanelId, hasBorder }) {
     // console.log(typeof modules)
     // console.log(modules)
     // console.log(activePanelId)
@@ -9,11 +9,11 @@ function Panel({ modules, activePanelId }) {
     const panel_image = modules.find(m => m.panelId === activePanelId).image
     const refinedPrompt = modules.find(m => m.panelId === activePanelId).refinedPrompt
 
-    const [hasBorder, setHasBorder] = useState(true);
+    // const [hasBorder, setHasBorder] = useState(true);
 
-    const toggleBorder = () => {
-        setHasBorder(!hasBorder);
-    };
+    // const toggleBorder = () => {
+    //     setHasBorder(!hasBorder);
+    // };
 
     // console.log(refinedPrompt)
 
@@ -23,19 +23,19 @@ function Panel({ modules, activePanelId }) {
                 alt="AI Generated Image"
                 title={refinedPrompt}
                 style={{
-                    border: hasBorder ? '3px solid black' : 'none',
+                    border: hasBorder ? '10px solid black' : 'none',
                 }}
                 className='panel-image'
             />
 
-            <label style={{ color: 'black' }}>
+            {/* <label style={{ color: 'black' }}>
                 <input
                     type="checkbox"
                     checked={hasBorder}
                     onChange={toggleBorder}
                 />
                 Border on/off
-            </label>
+            </label> */}
         </div>
 
     );
