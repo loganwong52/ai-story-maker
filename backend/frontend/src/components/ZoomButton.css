@@ -16,6 +16,11 @@
     color: white;
 }
 
+.zoom-button:hover {
+    background-color: lightgrey;
+    color: black;
+}
+
 .pulse-animation {
     position: absolute;
     top: 0;

@@ -44,17 +44,11 @@
 }
 
 
-
 /* Zoom buttons side-by-side */
 .zoom-controls {
     display: flex;
     gap: 4px;
     font-size: 20px;
-}
-
-.zoom-button:hover {
-    background-color: lightgrey;
-    color: black;
 }
 
 /* Checkbox alignment */

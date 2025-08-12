@@ -55,11 +55,8 @@ const Toolbar = ({
                     Zoom: {Math.round(zoomLevel * 100)}%
                 </label>
                 <div className="zoom-controls">
-                    {/* <button className="zoom-button" onMouseDown={onZoomIn} >+</button> */}
-                    {/* <button className="zoom-button" onMouseDown={onZoomOut} >-</button> */}
                     <ZoomButton action={onZoomIn} direction="in">+</ZoomButton>
                     <ZoomButton action={onZoomOut} direction="out">-</ZoomButton>
-
                 </div>
             </div>
 
@@ -75,8 +72,6 @@ const Toolbar = ({
                     />
                 </label>
             </div>
-
-
         </div>
     );
 };
