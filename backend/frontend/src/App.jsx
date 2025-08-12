@@ -137,6 +137,31 @@ function App() {
 
 
   // STUFF FOR TOOLBAR
+
+
+
+  // Zoom in/out
+  const [panelZoom, setPanelZoom] = useState(() => {
+    const zoom = {};
+    modules.forEach(module => {
+      zoom[module.panelId] = 1;
+      // Default zoom level (1 = 100%)
+    });
+    return zoom;
+  });
+
+  const handleZoom = (panelId, direction) => {
+    setPanelZoom(prev => ({
+      ...prev,
+      [panelId]: Math.max(0.1, Math.min(
+        prev[panelId] + (direction === 'in' ? 0.01 : -0.01),
+        3.0 // Max 300% zoom
+      ))
+    }));
+  };
+
+
+  // Checkbox
   const totalPanels = panelLabels.flat().length;
   // console.log("Total Panels:", totalPanels)
 
@@ -239,6 +264,12 @@ function App() {
         <div className="result-section">
 
           <Toolbar
+            // zoom in/out
+            zoomLevel={panelZoom[selectedPanelId] || 1}
+            onZoomIn={() => handleZoom(selectedPanelId, 'in')}
+            onZoomOut={() => handleZoom(selectedPanelId, 'out')}
+
+            // checkbox
             totalPanels={totalPanels}
             selectedPanelNumber={getPanelNumberFromId(selectedPanelId)}
             onPanelSelect={handlePanelSelect}
@@ -282,6 +313,7 @@ function App() {
                                 modules={modules}
                                 activePanelId={panelId}
                                 hasBorder={panelBorders[panelId] ?? true}
+                                zoomLevel={panelZoom[panelId] || 1}
                               />
 
                             </div>

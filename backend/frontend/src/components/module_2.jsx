@@ -1,4 +1,6 @@
-function Panel({ modules, activePanelId, hasBorder }) {
+import './Panel.css';
+
+function Panel({ modules, activePanelId, hasBorder, zoomLevel = 1 }) {
     /* 
     modules: dictionary 
     activePanelId: int; the panel number of the most recent generated image
@@ -8,12 +10,19 @@ function Panel({ modules, activePanelId, hasBorder }) {
     const refinedPrompt = modules.find(m => m.panelId === activePanelId).refinedPrompt
 
     return (
-        <div className="panel-image-container">
-            <img src={panel_image}
+        <div className="panel-image-container"
+            style={{
+                border: hasBorder ? '2.5px solid black' : 'none',
+            }}
+        >
+            <img
+                src={panel_image}
                 alt="AI Generated Image"
                 title={refinedPrompt}
                 style={{
-                    border: hasBorder ? '10px solid black' : 'none',
+                    // Zoom in/out
+                    transform: `scale(${zoomLevel})`,
+                    // changing zoomLevel causes zoom in/out
                 }}
                 className='panel-image'
             />

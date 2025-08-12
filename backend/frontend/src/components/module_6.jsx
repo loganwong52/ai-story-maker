@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import './Toolbar.css';
+import ZoomButton from './module_7';
 
 const Toolbar = ({
+
+    // Zoom in/out
+    zoomLevel, onZoomIn, onZoomOut,
+
+    // checkbox
     totalPanels,
     selectedPanelNumber,
     onPanelSelect,
@@ -45,10 +51,15 @@ const Toolbar = ({
 
             {/* zoom in/out */}
             <div className="toolbar-section">
-                <label>Zoom:</label>
+                <label>
+                    Zoom: {Math.round(zoomLevel * 100)}%
+                </label>
                 <div className="zoom-controls">
-                    <button className="zoom-button" >+</button>
-                    <button className="zoom-button" >-</button>
+                    {/* <button className="zoom-button" onMouseDown={onZoomIn} >+</button> */}
+                    {/* <button className="zoom-button" onMouseDown={onZoomOut} >-</button> */}
+                    <ZoomButton action={onZoomIn} direction="in">+</ZoomButton>
+                    <ZoomButton action={onZoomOut} direction="out">-</ZoomButton>
+
                 </div>
             </div>
 

@@ -52,6 +52,11 @@
     font-size: 20px;
 }
 
+.zoom-button:hover {
+    background-color: lightgrey;
+    color: black;
+}
+
 /* Checkbox alignment */
 .toolbar-section input[type="checkbox"] {
     margin-right: 4px;
