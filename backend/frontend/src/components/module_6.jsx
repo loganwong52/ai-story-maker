@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Toolbar.css';
 import ZoomButton from './module_7';
+import ArrowButton from './module_8';
 
 const Toolbar = ({
     // 4 Arrow buttons
@@ -44,10 +45,16 @@ const Toolbar = ({
             <div className="toolbar-section">
                 <label>Position:</label>
                 <div className="arrow-buttons">
-                    <button className="arrow-button" onClick={onMoveLeft}>←</button>
-                    <button className="arrow-button" onClick={onMoveRight}>→</button>
-                    <button className="arrow-button" onClick={onMoveUp}>↑</button>
-                    <button className="arrow-button" onClick={onMoveDown}>↓</button>
+                    {/* <button className="arrow-button" onClick={onMoveLeft}>←</button> */}
+                    {/* <button className="arrow-button" onClick={onMoveRight}>→</button> */}
+                    {/* <button className="arrow-button" onClick={onMoveUp}>↑</button> */}
+                    {/* <button className="arrow-button" onClick={onMoveDown}>↓</button> */}
+
+                    <ArrowButton action={onMoveLeft} direction="left">←</ArrowButton>
+                    <ArrowButton action={onMoveRight} direction="right">→</ArrowButton>
+                    <ArrowButton action={onMoveUp} direction="up">↑</ArrowButton>
+                    <ArrowButton action={onMoveDown} direction="down">↓</ArrowButton>
+
                 </div>
             </div>
 

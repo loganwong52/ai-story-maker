@@ -1,24 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
-import "./ZoomButton.css"
+import "./ArrowButton.css";
 
-const ZoomButton = ({ action, children, direction }) => {
+const ArrowButton = ({ action, children, direction }) => {
     const [isHolding, setIsHolding] = useState(false);
     const holdTimer = useRef();
     const actionCount = useRef(0);
 
-    // Handle both click and hold
     const handlePointerDown = (e) => {
-        e.preventDefault(); // Prevent text selection
+        e.preventDefault();
         action();
 
-        // Start hold action after 300ms
         holdTimer.current = setTimeout(() => {
             setIsHolding(true);
             actionCount.current = 0;
             holdTimer.current = setInterval(() => {
                 actionCount.current++;
                 action();
-            }, 100 - Math.min(actionCount.current * 10, 50)); // Accelerates while holding
+            }, 100 - Math.min(actionCount.current * 10, 50)); // Accelerates
         }, 300);
     };
 
@@ -28,7 +26,6 @@ const ZoomButton = ({ action, children, direction }) => {
         setIsHolding(false);
     };
 
-    // Cleanup
     useEffect(() => {
         return () => {
             clearTimeout(holdTimer.current);
@@ -38,17 +35,17 @@ const ZoomButton = ({ action, children, direction }) => {
 
     return (
         <button
-            className={`zoom-button ${isHolding ? 'active' : ''}`}
+            className={`arrow-button ${isHolding ? 'active' : ''}`}
             onMouseDown={handlePointerDown}
             onMouseUp={handlePointerUp}
             onMouseLeave={handlePointerUp}
             onTouchStart={handlePointerDown}
             onTouchEnd={handlePointerUp}
-            aria-label={`Zoom ${direction}`}
+            aria-label={`Move ${direction}`}
         >
             {children}
         </button>
     );
 };
 
-export default ZoomButton
+export default ArrowButton;

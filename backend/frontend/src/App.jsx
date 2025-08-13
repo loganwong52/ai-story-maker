@@ -143,17 +143,14 @@ function App() {
   const [panelPositions, setPanelPositions] = useState(() => {
     const positions = {};
     modules.forEach(module => {
-      positions[module.panelId] = {
-        x: 0,  // Horizontal offset (pixels)
-        y: 0   // Vertical offset (pixels)
-      };
+      positions[module.panelId] = { x: 0, y: 0 };
     });
     return positions;
   });
 
   const moveImage = (panelId, direction) => {
     setPanelPositions(prev => {
-      const moveAmount = 10; // Pixels to move per click
+      const moveAmount = 1;
       const newPositions = { ...prev };
 
       switch (direction) {
