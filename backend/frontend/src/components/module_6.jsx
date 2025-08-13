@@ -3,6 +3,8 @@ import './Toolbar.css';
 import ZoomButton from './module_7';
 
 const Toolbar = ({
+    // 4 Arrow buttons
+    onMoveUp, onMoveDown, onMoveLeft, onMoveRight,
 
     // Zoom in/out
     zoomLevel, onZoomIn, onZoomOut,
@@ -42,10 +44,10 @@ const Toolbar = ({
             <div className="toolbar-section">
                 <label>Position:</label>
                 <div className="arrow-buttons">
-                    <button className="arrow-button">↑</button>
-                    <button className="arrow-button" >↓</button>
-                    <button className="arrow-button" >←</button>
-                    <button className="arrow-button" >→</button>
+                    <button className="arrow-button" onClick={onMoveLeft}>←</button>
+                    <button className="arrow-button" onClick={onMoveRight}>→</button>
+                    <button className="arrow-button" onClick={onMoveUp}>↑</button>
+                    <button className="arrow-button" onClick={onMoveDown}>↓</button>
                 </div>
             </div>
 

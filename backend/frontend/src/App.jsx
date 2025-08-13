@@ -138,6 +138,42 @@ function App() {
 
   // STUFF FOR TOOLBAR
 
+  // 4 Arrow buttons
+  // Dictionary holds (x,y) of all panels' center coords
+  const [panelPositions, setPanelPositions] = useState(() => {
+    const positions = {};
+    modules.forEach(module => {
+      positions[module.panelId] = {
+        x: 0,  // Horizontal offset (pixels)
+        y: 0   // Vertical offset (pixels)
+      };
+    });
+    return positions;
+  });
+
+  const moveImage = (panelId, direction) => {
+    setPanelPositions(prev => {
+      const moveAmount = 10; // Pixels to move per click
+      const newPositions = { ...prev };
+
+      switch (direction) {
+        case 'up':
+          newPositions[panelId].y -= moveAmount;
+          break;
+        case 'down':
+          newPositions[panelId].y += moveAmount;
+          break;
+        case 'left':
+          newPositions[panelId].x -= moveAmount;
+          break;
+        case 'right':
+          newPositions[panelId].x += moveAmount;
+          break;
+      }
+
+      return newPositions;
+    });
+  };
 
 
   // Zoom in/out
@@ -264,6 +300,12 @@ function App() {
         <div className="result-section">
 
           <Toolbar
+            // 4 Arrow buttons
+            onMoveUp={() => moveImage(selectedPanelId, 'up')}
+            onMoveDown={() => moveImage(selectedPanelId, 'down')}
+            onMoveLeft={() => moveImage(selectedPanelId, 'left')}
+            onMoveRight={() => moveImage(selectedPanelId, 'right')}
+
             // zoom in/out
             zoomLevel={panelZoom[selectedPanelId] || 1}
             onZoomIn={() => handleZoom(selectedPanelId, 'in')}
@@ -314,6 +356,7 @@ function App() {
                                 activePanelId={panelId}
                                 hasBorder={panelBorders[panelId] ?? true}
                                 zoomLevel={panelZoom[panelId] || 1}
+                                position={panelPositions[module.panelId] || { x: 0, y: 0 }}
                               />
 
                             </div>

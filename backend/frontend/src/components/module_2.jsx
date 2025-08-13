@@ -1,10 +1,11 @@
 import './Panel.css';
 
-function Panel({ modules, activePanelId, hasBorder, zoomLevel = 1 }) {
+function Panel({ modules, activePanelId, hasBorder, zoomLevel = 1, position }) {
     /* 
     modules: dictionary 
     activePanelId: int; the panel number of the most recent generated image
     hasBorder: boolean
+    zoomLevel: int; amount to zoom in/out on image
     */
     const panel_image = modules.find(m => m.panelId === activePanelId).image
     const refinedPrompt = modules.find(m => m.panelId === activePanelId).refinedPrompt
@@ -21,7 +22,9 @@ function Panel({ modules, activePanelId, hasBorder, zoomLevel = 1 }) {
                 title={refinedPrompt}
                 style={{
                     // Zoom in/out
-                    transform: `scale(${zoomLevel})`,
+                    transform: `
+                        translate(${position.x}px, ${position.y}px)
+                        scale(${zoomLevel})`,
                     // changing zoomLevel causes zoom in/out
                 }}
                 className='panel-image'
