@@ -69,12 +69,22 @@ function ComicBubbles() {
                             className="bubble-content"
                             contentEditable
                             suppressContentEditableWarning
-                            onDoubleClick={(e) => {
-                                e.stopPropagation();
-                                const range = document.createRange();
-                                range.selectNodeContents(e.currentTarget);
-                                window.getSelection().removeAllRanges().addRange(range);
+
+                            onMouseDown={(e) => {
+                                // Allow double clicking to select all text
+                                if (e.detail >= 2) {
+                                    e.stopPropagation();
+                                    requestAnimationFrame(() => {
+                                        if (!e.currentTarget) return;
+                                        const selection = window.getSelection();
+                                        const range = document.createRange();
+                                        range.selectNodeContents(e.currentTarget);
+                                        selection.removeAllRanges();
+                                        selection.addRange(range);
+                                    });
+                                }
                             }}
+
                             onBlur={(e) => {
                                 setBubbles(bubbles.map(b =>
                                     b.id === bubble.id ? { ...b, text: e.target.innerText } : b
@@ -93,15 +103,6 @@ function ComicBubbles() {
                                 e.stopPropagation();
                                 deleteBubble(bubble.id);
                             }}
-                        // // Change color when mouse button is pressed
-                        // onMouseDown={(e) => { e.currentTarget.style.background = 'darkred'; }}
-                        // onMouseUp={(e) => { e.currentTarget.style.background = 'red'; }}
-
-                        // onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
-                        // onMouseLeave={(e) => {
-                        //     e.currentTarget.style.background = 'red';
-                        //     e.currentTarget.style.opacity = 0;
-                        // }}
                         >X</button>
                     </div>
                 </Draggable>

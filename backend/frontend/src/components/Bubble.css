@@ -23,6 +23,20 @@
     user-select: text;
 }
 
+.bubble-content {
+    cursor: text;
+    user-select: text;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+
+    white-space: pre-wrap;
+    display: inline-block;
+    width: 100%;
+    outline: none;
+}
+
+
 .delete-bubble-btn {
     position: absolute;
     top: -10px;
@@ -41,13 +55,9 @@
     line-height: 0;
     padding: 0 0 2px 0;
 
-    /* Prevent text selection of the x */
     user-select: none;
     pointer-events: auto;
     transition: opacity 0.2s, background 0.2s;
-    /* Add transition */
-
-
 }
 
 .bubble:hover .delete-bubble-btn {
@@ -55,6 +65,5 @@
 }
 
 .delete-bubble-btn:active {
-    background: darkred !important;
-    /* Force click color */
+    background: darkred;
 }
