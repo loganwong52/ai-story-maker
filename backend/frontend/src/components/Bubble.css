@@ -23,6 +23,7 @@
     user-select: text;
 }
 
+/* Text inside bubbles */
 .bubble-content {
     cursor: text;
     user-select: text;
@@ -37,6 +38,7 @@
 }
 
 
+/* Delete button */
 .delete-bubble-btn {
     position: absolute;
     top: -10px;
@@ -66,4 +68,50 @@
 
 .delete-bubble-btn:active {
     background: darkred;
+}
+
+
+
+/* Bubble tails */
+.bubble-tail {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Speech bubble tail position */
+.bubble[data-type="speech"] .bubble-tail {
+    bottom: -15px;
+    left: 20px;
+}
+
+/* Thought bubble tail position */
+.bubble[data-type="thought"] .bubble-tail {
+    bottom: -10px;
+    left: 15px;
+}
+
+
+/* _________________________________________________________________ */
+
+/* Add to Bubble.css */
+.bubble-tail {
+    position: absolute;
+    bottom: -15px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+}
+
+.tail-path {
+    stroke: black;
+    stroke-width: 2;
+    fill: white;
+    transition: all 0.2s;
+}
+
+
+.bubble:hover .tail-control-point {
+    opacity: 1 !important;
 }

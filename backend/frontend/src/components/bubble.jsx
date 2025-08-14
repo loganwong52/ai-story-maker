@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import './Bubble.css';
+import ThoughtBubble from './thoughtBubble.jsx';
 
 const BUBBLE_TYPES = {
     SPEECH: "speech",
@@ -10,11 +11,30 @@ const BUBBLE_TYPES = {
 };
 
 const BubbleStyle = {
-    speech: { borderRadius: '10px', tail: '▼' },
-    thought: { borderRadius: '50%', tail: '○' },
-    caption: { borderRadius: '0', tail: '' },
-    exclamation: { borderRadius: '10px', tail: '!' }
-};
+    speech: {
+        borderRadius: '75%',
+        paddingBottom: '15px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+
+        // tail: a curved or straight line
+    },
+    thought: {
+
+
+        // tail: a bunch of circles following a curved or straight line.
+    },
+    caption: {
+        borderRadius: '0',
+        tail: null // No tail
+    },
+    exclamation: {
+        borderRadius: '10px',
+        // tail: a straight line
+    }
+}
+
+
 
 
 
@@ -30,7 +50,7 @@ function ComicBubbles() {
             type: selectedType,
             text: "Click to edit",
             x: 50,
-            y: 50
+            y: 50,
         };
         setBubbles([...bubbles, newBubble]);
     };
@@ -94,8 +114,6 @@ function ComicBubbles() {
                             {bubble.text}
                         </div>
 
-                        <span style={{ fontSize: '10px', userSelect: 'none' }}>{BubbleStyle[bubble.type].tail}</span>
-
                         {/* Delete button (appears on hover) */}
                         <button
                             className='delete-bubble-btn'
@@ -104,6 +122,16 @@ function ComicBubbles() {
                                 deleteBubble(bubble.id);
                             }}
                         >X</button>
+
+                        {/* Tail rendering */}
+                        <ThoughtBubble
+                            style={{ width: 260, height: 180 }}     // scale the cloud
+                            stroke={2}
+                            fill="white"
+                            strokeColor="black"
+                        ></ThoughtBubble>
+
+
                     </div>
                 </Draggable>
             )
