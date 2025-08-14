@@ -5,6 +5,7 @@ import Panel from './components/module_2';
 import NumberDropdown from './components/module_3';
 import ResizablePanel from './components/module_4';
 import Toolbar from './components/module_6';
+import { toPng } from 'html-to-image';
 
 function updateColumnCounts(originalColumnCounts, numOfRows) {
   // Copy columnCounts
@@ -368,6 +369,18 @@ function App() {
 
             </div>
           </div>
+
+          <button
+            onClick={downloadDivAsPng}
+            style={{
+              marginTop: '10px',
+              marginBottom: '10px',
+              padding: '8px 16px',
+              cursor: 'pointer'
+            }}
+          >
+            Download as PNG
+          </button>
         </div>
         {/* End of Right column */}
       </div>
@@ -376,5 +389,26 @@ function App() {
     </div >
   );
 }
+
+
+// html-to-image package downloaded using npm install html-to-image
+// Converts everything inside the image-bleed div to a png
+const downloadDivAsPng = () => {
+  // get the image-bleed div
+  const element = document.querySelector('.image-bleed');
+  if (!element) return;
+
+  // Convert element to png
+  toPng(element)
+    .then((dataUrl) => {
+      const link = document.createElement('a');
+      link.download = 'ai_generated_comic_page.png';
+      link.href = dataUrl;
+      link.click();
+    })
+    .catch((err) => {
+      console.error('Error generating PNG:', err);
+    });
+};
 
 export default App
