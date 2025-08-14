@@ -6,6 +6,7 @@
     flex-wrap: wrap;
     padding: 8px;
     border-radius: 4px;
+    margin-bottom: 10px;
 }
 
 /* Ensures each section stays inline */

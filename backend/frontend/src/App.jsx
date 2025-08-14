@@ -229,6 +229,7 @@ function App() {
 
   return (
     <div className="app-container">
+
       {/* Left section w/ User Prompts */}
       <div className="left-column">
         {/* Dropdowns to choose Row # and Col #s */}
@@ -296,7 +297,6 @@ function App() {
       {/* Right White Section */}
       <div className='right-column'>
         <div className="result-section">
-
           <Toolbar
             // 4 Arrow buttons
             onMoveUp={() => moveImage(selectedPanelId, 'up')}
@@ -316,8 +316,8 @@ function App() {
             hasBorder={panelBorders[selectedPanelId] ?? true}
             onBorderToggle={handleBorderToggle}
           />
-          <br />
 
+          {/* White paper */}
           <div className="image-bleed">
             <div className="trim-line"></div>
             <div className="safe-area">
@@ -370,16 +370,9 @@ function App() {
             </div>
           </div>
 
-          <button
-            onClick={downloadDivAsPng}
-            style={{
-              marginTop: '10px',
-              marginBottom: '10px',
-              padding: '8px 16px',
-              cursor: 'pointer'
-            }}
-          >
-            Download as PNG
+          {/* Download button at the bottom */}
+          <button className='download-png-btn' onClick={downloadDivAsPng}>
+            Download Page as PNG
           </button>
         </div>
         {/* End of Right column */}
