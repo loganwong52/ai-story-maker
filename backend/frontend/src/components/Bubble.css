@@ -1,0 +1,22 @@
+/* Forces the Bubble Menu to be at top center of page */
+.comic-bubbles-layer {
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+/* The dropdown & Add btn */
+.bubble-controls {
+    padding: 10px;
+    background: lightgrey;
+}
+
+
+/* Individual Bubbles */
+.bubble {
+    position: absolute;
+    padding: 10px;
+    background: white;
+    color: black;
+    border: 2px solid black;
+}
