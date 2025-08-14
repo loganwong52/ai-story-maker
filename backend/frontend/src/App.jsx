@@ -6,6 +6,7 @@ import NumberDropdown from './components/module_3';
 import ResizablePanel from './components/module_4';
 import Toolbar from './components/module_6';
 import { toPng } from 'html-to-image';
+import ComicBubbles from './components/bubble';
 
 function updateColumnCounts(originalColumnCounts, numOfRows) {
   // Copy columnCounts
@@ -173,14 +174,6 @@ function App() {
     });
   };
 
-  const getPanelCoords = (panelId) => {
-    let x = panelPositions[panelId].x
-    let y = panelPositions[panelId].y
-
-    let temp_dict = { "x": x, "y": y }
-    return temp_dict
-  }
-
 
   // Zoom in/out
   const [panelZoom, setPanelZoom] = useState(() => {
@@ -304,6 +297,11 @@ function App() {
 
       {/* Right White Section */}
       <div className='right-column'>
+
+        <div>
+          <ComicBubbles />
+        </div>
+
         <div className="result-section">
           <Toolbar
             // 4 Arrow buttons
