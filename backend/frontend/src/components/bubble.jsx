@@ -21,7 +21,7 @@ const BubbleStyle = {
 function ComicBubbles() {
     const [bubbles, setBubbles] = useState([]);
     const [selectedType, setSelectedType] = useState(BUBBLE_TYPES.SPEECH);
-    const bubbleRef = useRef(null);
+    const bubbleRef = useRef({});
 
     // Create a new bubble
     const addBubble = () => {
@@ -64,55 +64,49 @@ function ComicBubbles() {
                             left: `${bubble.x}px`,
                             top: `${bubble.y}px`,
                             ...BubbleStyle[bubble.type]
-                        }}
-                        contentEditable
-                        suppressContentEditableWarning
-
-                        // Allow double clicking to highlight all text
-                        onClick={(e) => {
-                            if (e.detail === 2) {
+                        }}>
+                        <div
+                            className="bubble-content"
+                            contentEditable
+                            suppressContentEditableWarning
+                            onDoubleClick={(e) => {
                                 e.stopPropagation();
-                                requestAnimationFrame(() => {
-                                    if (!bubbleRef.current) return;
-                                    const selection = window.getSelection();
-                                    const range = document.createRange();
-                                    range.selectNodeContents(bubbleRef.current);
-                                    selection.removeAllRanges();
-                                    selection.addRange(range);
-                                });
-                            }
-                        }}
+                                const range = document.createRange();
+                                range.selectNodeContents(e.currentTarget);
+                                window.getSelection().removeAllRanges().addRange(range);
+                            }}
+                            onBlur={(e) => {
+                                setBubbles(bubbles.map(b =>
+                                    b.id === bubble.id ? { ...b, text: e.target.innerText } : b
+                                ));
+                            }}
+                        >
+                            {bubble.text}
+                        </div>
 
-                    >
-                        {bubble.text}
-                        <span style={{ fontSize: '10px' }}>{BubbleStyle[bubble.type].tail}</span>
-
+                        <span style={{ fontSize: '10px', userSelect: 'none' }}>{BubbleStyle[bubble.type].tail}</span>
 
                         {/* Delete button (appears on hover) */}
                         <button
-                            onClick={() => deleteBubble(bubble.id)}
-                            style={{
-                                position: 'absolute',
-                                top: '-10px',
-                                right: '-10px',
-                                background: 'red',
-                                color: 'red',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '20px',
-                                height: '20px',
-                                cursor: 'pointer',
-                                display: 'none' // Hidden by default
+                            className='delete-bubble-btn'
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                deleteBubble(bubble.id);
                             }}
-                            onMouseEnter={(e) => e.target.style.display = 'block'}
-                            onMouseLeave={(e) => e.target.style.display = 'none'}
-                        >
-                            ×
-                        </button>
+                        // // Change color when mouse button is pressed
+                        // onMouseDown={(e) => { e.currentTarget.style.background = 'darkred'; }}
+                        // onMouseUp={(e) => { e.currentTarget.style.background = 'red'; }}
 
+                        // onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
+                        // onMouseLeave={(e) => {
+                        //     e.currentTarget.style.background = 'red';
+                        //     e.currentTarget.style.opacity = 0;
+                        // }}
+                        >X</button>
                     </div>
                 </Draggable>
-            ))}
+            )
+            )}
         </div>
     );
 }
