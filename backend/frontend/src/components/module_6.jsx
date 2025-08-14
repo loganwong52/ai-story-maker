@@ -5,7 +5,7 @@ import ArrowButton from './module_8';
 
 const Toolbar = ({
     // 4 Arrow buttons
-    onMoveUp, onMoveDown, onMoveLeft, onMoveRight,
+    onMoveUp, onMoveDown, onMoveLeft, onMoveRight, currentCoords,
 
     // Zoom in/out
     zoomLevel, onZoomIn, onZoomOut,
@@ -43,18 +43,12 @@ const Toolbar = ({
 
             {/* Move arrows */}
             <div className="toolbar-section">
-                <label>Position:</label>
+                <label>Position: X:{currentCoords.x}, Y:{-1 * currentCoords.y}</label>
                 <div className="arrow-buttons">
-                    {/* <button className="arrow-button" onClick={onMoveLeft}>←</button> */}
-                    {/* <button className="arrow-button" onClick={onMoveRight}>→</button> */}
-                    {/* <button className="arrow-button" onClick={onMoveUp}>↑</button> */}
-                    {/* <button className="arrow-button" onClick={onMoveDown}>↓</button> */}
-
                     <ArrowButton action={onMoveLeft} direction="left">←</ArrowButton>
                     <ArrowButton action={onMoveRight} direction="right">→</ArrowButton>
                     <ArrowButton action={onMoveUp} direction="up">↑</ArrowButton>
                     <ArrowButton action={onMoveDown} direction="down">↓</ArrowButton>
-
                 </div>
             </div>
 

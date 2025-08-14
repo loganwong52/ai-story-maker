@@ -173,6 +173,14 @@ function App() {
     });
   };
 
+  const getPanelCoords = (panelId) => {
+    let x = panelPositions[panelId].x
+    let y = panelPositions[panelId].y
+
+    let temp_dict = { "x": x, "y": y }
+    return temp_dict
+  }
+
 
   // Zoom in/out
   const [panelZoom, setPanelZoom] = useState(() => {
@@ -303,6 +311,7 @@ function App() {
             onMoveDown={() => moveImage(selectedPanelId, 'down')}
             onMoveLeft={() => moveImage(selectedPanelId, 'left')}
             onMoveRight={() => moveImage(selectedPanelId, 'right')}
+            currentCoords={panelPositions[selectedPanelId]}
 
             // zoom in/out
             zoomLevel={panelZoom[selectedPanelId] || 1}
