@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import './Bubble.css';
-import ThoughtBubble from './thoughtBubble.jsx';
+// import ThoughtBubble from './thoughtBubble.jsx';
+import ComicBalloon from './module_9.jsx';
 
 const BUBBLE_TYPES = {
     SPEECH: "speech",
@@ -124,13 +125,13 @@ function ComicBubbles() {
                         >X</button>
 
                         {/* Tail rendering */}
-                        <ThoughtBubble
+                        {/* <ThoughtBubble
                             style={{ width: 260, height: 180 }}     // scale the cloud
                             stroke={2}
                             fill="white"
                             strokeColor="black"
-                        ></ThoughtBubble>
-
+                        ></ThoughtBubble> */}
+                        {/* <ComicBalloon /> */}
 
                     </div>
                 </Draggable>

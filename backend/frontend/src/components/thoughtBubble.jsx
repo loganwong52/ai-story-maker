@@ -35,11 +35,8 @@ function ThoughtBubble({
                 stroke={strokeColor}
                 strokeWidth={stroke}
             />
-
-
         </svg>
     );
 }
-
 
 export default ThoughtBubble
