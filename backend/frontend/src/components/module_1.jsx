@@ -94,16 +94,24 @@ function User_prompt({ panelId = 0, modules = [], setModules, setActivePanelId }
             console.log("image_url:", image_url)
 
             // Turn temp URL to permanent URL
-            const uploadResponse = await fetch('/api/upload-image/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image_url: image_url }) // Your temp URL
-            });
-            const upload_data = await uploadResponse.json();
-            const permanent_url = upload_data.image_url;
-            console.log("Permanent URL:", permanent_url);
+            try {
+                const uploadResponse = await fetch('/api/upload-image/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image_url: image_url }) // Your temp URL
+                });
+                const upload_data = await uploadResponse.json();
+                const permanent_url = upload_data.image_url;
+                console.log("Permanent URL:", permanent_url);
 
-            updateModule('image', permanent_url);
+                updateModule('image', permanent_url);
+            } catch (error) {
+                print("Supabase not working...")
+            } finally {
+                // Concede defeat, use temporary URL
+                updateModule('image', image_url);
+            }
+
 
 
             // let data;
